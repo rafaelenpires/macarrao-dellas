@@ -360,6 +360,31 @@
     })();
   </script>
   <style>
+    /* Combos principais no topo do cardápio. */
+    #combosSection .top-combo-grid{grid-template-columns:repeat(4,1fr)}
+    @media(max-width:1050px){#combosSection .top-combo-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:800px){#combosSection .top-combo-grid{grid-template-columns:1fr}}
+  </style>
+  <script>
+    (function promoteMainCombos(){
+      const section=document.querySelector('#combosSection');
+      const firstCategory=document.querySelector('.menu .category');
+      const originalGrid=section?.querySelector('.combo-grid');
+      const dellasCard=originalGrid?.querySelector('.combo-card');
+      if(!section||!firstCategory||!originalGrid||!dellasCard)return;
+      firstCategory.before(section);
+      section.querySelector('.category-title h3').textContent='Combos em destaque';
+      section.querySelector('.category-title small').textContent='As melhores opções para cada tamanho de fome';
+      originalGrid.classList.add('top-combo-grid');
+      dellasCard.querySelector('.combo-tag').textContent='🥉 Combo Casal';
+      dellasCard.querySelector('h4').textContent='Combo Dellas';
+      const comboCard=(tag,name,description,price,details)=>`<article class="card combo-card"><span class="combo-tag">${tag}</span><h4>${name}</h4><p>${description}</p><div class="card-bottom"><span class="price">${money(price)}</span><button class="add quick-combo" type="button" data-name="${name}" data-price="${price}" data-details="${details}">Adicionar</button></div></article>`;
+      dellasCard.insertAdjacentHTML('beforebegin',comboCard('🥇 Combo Econômico','Combo Econômico','Macarrão 500 ml + Guaraná 200 ml. Frete grátis para o Planalto Ayrton Senna.',24.9,'Macarrão 500 ml | Guaraná 200 ml | Frete grátis para o Planalto Ayrton Senna | Confirmar sabor e montagem pelo WhatsApp')+comboCard('🥈 Combo Premium','Combo Premium','Macarrão 750 ml + 10 mini salgados + Guaraná 1 L.',39.9,'Macarrão 750 ml | 10 mini salgados | Guaraná 1 L | Confirmar sabor e montagem pelo WhatsApp'));
+      dellasCard.insertAdjacentHTML('afterend',comboCard('🏆 Combo Família','Combo Família','2 macarronadas 750 ml + Guaraná 1 L + 20 mini salgados.',69.9,'2 macarronadas 750 ml | Guaraná 1 L | 20 mini salgados | Confirmar sabores e montagem pelo WhatsApp'));
+      section.querySelectorAll('.quick-combo').forEach(button=>button.addEventListener('click',()=>{cart.push({name:button.dataset.name,price:Number(button.dataset.price),details:button.dataset.details});updateCart();button.textContent='Adicionado ✓';setTimeout(()=>button.textContent='Adicionar',1200)}));
+    })();
+  </script>
+  <style>
     /* Fotos reais usadas com moderação para valorizar o cardápio. */
     .card.has-food-photo{overflow:hidden}.food-photo{display:block;width:calc(100% + 40px);aspect-ratio:4/3;object-fit:cover;margin:-20px -20px 16px;border-bottom:1px solid #ead4ad}.combo-showcase{position:relative;overflow:hidden;margin:0 0 15px;border-radius:18px;min-height:260px;background:#3a070e;box-shadow:0 14px 32px rgba(70,23,10,.13)}.combo-showcase img{display:block;width:100%;height:clamp(260px,34vw,390px);object-fit:cover;object-position:center 58%}.combo-showcase figcaption{position:absolute;left:18px;right:18px;bottom:16px;width:max-content;max-width:calc(100% - 36px);padding:9px 13px;border-radius:999px;background:rgba(41,3,9,.78);backdrop-filter:blur(8px);color:#ffe3a0;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}.combo-card.has-food-photo{min-height:330px}@media(max-width:800px){.combo-showcase{min-height:220px}.combo-showcase img{height:250px}.combo-showcase figcaption{font-size:9px}.combo-card.has-food-photo{min-height:300px}}
   </style>
