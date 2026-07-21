@@ -22,3 +22,12 @@ export async function PATCH(request: Request, context: { params: Promise<{ token
   if (!result.meta.changes) return Response.json({ error: "Pedido não encontrado" }, { status: 404 });
   return Response.json({ status });
 }
+
+export async function DELETE(_request: Request, context: { params: Promise<{ token: string }> }) {
+  const user = await getChatGPTUser();
+  if (!user || user.email.toLowerCase() !== OWNER_EMAIL) return Response.json({ error: "Não autorizado" }, { status: 401 });
+  const { token } = await context.params;
+  const result = await env.DB.prepare("DELETE FROM orders WHERE tracking_token = ?").bind(token).run();
+  if (!result.meta.changes) return Response.json({ error: "Pedido não encontrado" }, { status: 404 });
+  return Response.json({ deleted: true });
+}
