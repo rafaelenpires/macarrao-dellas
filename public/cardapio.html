@@ -490,9 +490,16 @@
       const sendOrderToWhatsApp=sendWhatsApp;
       sendWhatsApp=async function(){
         if(checkoutButton?.disabled)return;
-        const before=(JSON.parse(localStorage.getItem('dellas-management-v3')||'null')?.orders||[]).length;
+        let management;
+        try{management=JSON.parse(localStorage.getItem('dellas-management-v3')||'null')}catch{management=null}
+        if(!management)management={};
+        management.orders??=[];
+        management.deliveryControl??={fee:0,count:0,total:0};
+        localStorage.setItem('dellas-management-v3',JSON.stringify(management));
+        const before=management.orders.length;
         sendOrderToWhatsApp();
-        const management=JSON.parse(localStorage.getItem('dellas-management-v3')||'null'),order=management?.orders?.[management.orders.length-1];
+        management=JSON.parse(localStorage.getItem('dellas-management-v3')||'null');
+        const order=management?.orders?.[management.orders.length-1];
         if(!order||management.orders.length<=before)return;
         if(checkoutButton){checkoutButton.disabled=true;checkoutButton.textContent='Criando acompanhamento…'}
         try{
