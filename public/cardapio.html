@@ -385,6 +385,40 @@
       section.querySelectorAll('.quick-combo').forEach(button=>button.addEventListener('click',()=>{cart.push({name:button.dataset.name,price:Number(button.dataset.price),details:button.dataset.details});updateCart();button.textContent='Adicionado ✓';setTimeout(()=>button.textContent='Adicionar',1200)}));
     })();
   </script>
+  <script>
+    /* Montagem completa dos combos em destaque e categoria Turbinado. */
+    (function setupFeaturedComboBuilders(){
+      const largeSection=document.querySelector('#pasta750')?.closest('.category');
+      const extrasSection=document.querySelector('#extras')?.closest('.category');
+      if(largeSection&&extrasSection&&!document.querySelector('#turbinados')){
+        const section=document.createElement('section');
+        section.className='category';
+        section.innerHTML='<div class="category-title"><h3>Turbinado · 750 ml</h3><small>Três proteínas para uma fome de respeito</small></div><div class="grid" id="turbinados"></div>';
+        extrasSection.before(section);
+        const items=[['Frango + Bacon + Calabresa',34.9],['Carne de Sol + Bacon + Calabresa',39.9],['Carne Moída + Bacon + Calabresa',36.9]];
+        document.querySelector('#turbinados').innerHTML=items.map(item=>card([item[0],item[1],'Macarrão 750 ml turbinado com três proteínas.','750 ml'],true)).join('');
+      }
+
+      const featured={
+        'Combo Econômico':{price:24.9,count:1,size:500,limit:3,flavors:['Frango','Calabresa','Carne Moída','Salsicha'],includes:'Guaraná 200 ml | Frete grátis para o Planalto Ayrton Senna'},
+        'Combo Premium':{price:39.9,count:1,size:750,limit:5,flavors:catalog.p750.map(item=>item[0]).filter(name=>!/^Camarão$/i.test(name)),includes:'10 mini salgados | Guaraná 1 L'},
+        'Combo Família':{price:69.9,count:2,size:750,limit:5,flavors:catalog.p750.map(item=>item[0]).filter(name=>!/^Camarão$/i.test(name)),includes:'20 mini salgados | Guaraná 1 L'}
+      };
+      const ingredientOptions=['Salsicha','Azeitona','Milho','Ervilha','Uva passa','Cheiro verde','Queijo','Pimenta do reino'];
+      const finishOptions=['Queijo','Orégano','Pimenta biquinho','Sem finalização'];
+      const escapeHtml=value=>String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      document.body.insertAdjacentHTML('beforeend','<div id="featuredComboModal" class="overlay"><div class="modal"><div class="modal-head"><div><h3 id="featuredComboTitle">Monte seu combo</h3><span id="featuredComboSubtitle">Faça suas escolhas</span></div><button class="close" type="button" onclick="closeModal(\'featuredComboModal\')">×</button></div><form id="featuredComboForm" class="combo-modal-form"><div id="featuredComboFields" class="combo-builder"></div><div class="combo-price-preview"><span>Total</span><span id="featuredComboPrice"></span></div><button class="primary">Adicionar ao pedido</button></form></div></div>');
+      const modal=document.querySelector('#featuredComboModal'),form=document.querySelector('#featuredComboForm'),fields=document.querySelector('#featuredComboFields');let active=null;
+      function mealFields(number){return `<div class="combo-builder-box"><h4>Macarronada ${active.count>1?number:''} · ${active.size} ml</h4><label class="field">Sabor<select class="combo-select" name="featuredFlavor${number}" required>${active.flavors.map(flavor=>`<option>${escapeHtml(flavor)}</option>`).join('')}</select></label><p class="combo-note"><strong>Massa:</strong> Espaguete · escolha até ${active.limit} ingredientes</p><div class="combo-checks">${ingredientOptions.map((ingredient,index)=>`<span><input type="checkbox" name="featuredIng${number}" id="featuredIng${number}-${index}" value="${escapeHtml(ingredient)}"><label for="featuredIng${number}-${index}">${escapeHtml(ingredient)}</label></span>`).join('')}</div><label class="field" style="margin-top:12px">Finalização<select class="combo-select" name="featuredFinish${number}" required>${finishOptions.map(finish=>`<option>${escapeHtml(finish)}</option>`).join('')}</select></label></div>`}
+      function openFeatured(name){active={name,...featured[name]};document.querySelector('#featuredComboTitle').textContent=name;document.querySelector('#featuredComboSubtitle').textContent=`${active.count} macarronada${active.count>1?'s':''} de ${active.size} ml · até ${active.limit} ingredientes`;fields.innerHTML=Array.from({length:active.count},(_,index)=>mealFields(index+1)).join('')+`<p class="combo-note">O combo inclui: ${active.includes}.</p>`;document.querySelector('#featuredComboPrice').textContent=money(active.price);modal.classList.add('show')}
+      document.querySelectorAll('.quick-combo').forEach(oldButton=>{
+        const name=oldButton.dataset.name;if(!featured[name])return;
+        const button=oldButton.cloneNode(true);oldButton.replaceWith(button);button.textContent='Montar';button.addEventListener('click',()=>openFeatured(name));
+      });
+      fields.addEventListener('change',event=>{if(!event.target.matches('input[type="checkbox"]'))return;const selected=fields.querySelectorAll(`input[name="${event.target.name}"]:checked`);if(selected.length>active.limit){event.target.checked=false;alert(`Escolha até ${active.limit} ingredientes para cada macarronada.`)}});
+      form.addEventListener('submit',event=>{event.preventDefault();if(!active)return;const data=new FormData(form),details=Array.from({length:active.count},(_,index)=>index+1).map(number=>{const selected=[...fields.querySelectorAll(`input[name="featuredIng${number}"]:checked`)].map(input=>input.value);return `Macarronada ${number} (${active.size} ml): ${data.get(`featuredFlavor${number}`)} | Massa: Espaguete | Ingredientes: ${selected.length?selected.join(', '):'sem ingredientes'} | Finalização: ${data.get(`featuredFinish${number}`)}`}).join(' || ');cart.push({name:active.name,price:active.price,details:`${details} | ${active.includes}`});updateCart();closeModal('featuredComboModal');form.reset()});
+    })();
+  </script>
   <style>
     /* Fotos reais usadas com moderação para valorizar o cardápio. */
     .card.has-food-photo{overflow:hidden}.food-photo{display:block;width:calc(100% + 40px);aspect-ratio:4/3;object-fit:cover;margin:-20px -20px 16px;border-bottom:1px solid #ead4ad}.combo-showcase{position:relative;overflow:hidden;margin:0 0 15px;border-radius:18px;min-height:260px;background:#3a070e;box-shadow:0 14px 32px rgba(70,23,10,.13)}.combo-showcase img{display:block;width:100%;height:clamp(260px,34vw,390px);object-fit:cover;object-position:center 58%}.combo-showcase figcaption{position:absolute;left:18px;right:18px;bottom:16px;width:max-content;max-width:calc(100% - 36px);padding:9px 13px;border-radius:999px;background:rgba(41,3,9,.78);backdrop-filter:blur(8px);color:#ffe3a0;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}.combo-card.has-food-photo{min-height:330px}@media(max-width:800px){.combo-showcase{min-height:220px}.combo-showcase img{height:250px}.combo-showcase figcaption{font-size:9px}.combo-card.has-food-photo{min-height:300px}}
