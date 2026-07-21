@@ -258,4 +258,28 @@ document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>
     if(!event.target.closest('#reportsNav'))sessionStorage.removeItem('dellas-reports-authorized');
   },true));
 </script>
+<style>
+  .order-alert-toast{display:none;position:fixed;z-index:80;right:20px;top:96px;max-width:360px;padding:16px 18px;border-radius:14px;background:#ffd867;color:#3b0710;box-shadow:0 18px 48px rgba(49,4,13,.3);font-weight:800}.order-alert-toast.show{display:block;animation:alertPulse .8s ease-in-out 3}@keyframes alertPulse{50%{transform:scale(1.04)}}
+</style>
+<div id="orderAlertToast" class="order-alert-toast" role="alert">🔔 Novo pedido recebido!</div>
+<script>
+  /* Sincroniza pedidos entre aparelhos, atualiza status e garante o alerta sonoro. */
+  let durableOrderAudio=null;
+  const soundButton=document.querySelector('#enableSound');
+  soundButton?.addEventListener('click',async()=>{const AudioEngine=window.AudioContext||window.webkitAudioContext;durableOrderAudio??=new AudioEngine();if(durableOrderAudio.state==='suspended')await durableOrderAudio.resume();orderAlertsEnabled=true;soundButton.textContent='Alerta sonoro ativado ✓';playOrderAlert()});
+  playOrderAlert=function(){if(!orderAlertsEnabled||!durableOrderAudio)return;try{const ctx=durableOrderAudio,now=ctx.currentTime;[0,.25,.5,.75].forEach((offset,index)=>{const oscillator=ctx.createOscillator(),gain=ctx.createGain();oscillator.type=index%2?'square':'sine';oscillator.frequency.value=index%2?880:660;gain.gain.setValueAtTime(.001,now+offset);gain.gain.exponentialRampToValueAtTime(.24,now+offset+.025);gain.gain.exponentialRampToValueAtTime(.001,now+offset+.2);oscillator.connect(gain).connect(ctx.destination);oscillator.start(now+offset);oscillator.stop(now+offset+.22)});const toast=document.querySelector('#orderAlertToast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),5000)}catch{soundButton.textContent='Clique para liberar o som'}};
+  async function syncCloudOrders(){
+    try{
+      const response=await fetch('/api/orders',{cache:'no-store'});if(!response.ok)return;
+      const cloud=(await response.json()).orders||[],s=state(),localById=new Map((s.orders||[]).map(order=>[order.id,order]));
+      cloud.forEach(order=>localById.set(order.id,{...(localById.get(order.id)||{}),...order}));s.orders=[...localById.values()].sort((a,b)=>new Date(a.date)-new Date(b.date));save(s);checkIncomingOrders();
+      if(document.querySelector('#orders')?.classList.contains('active'))renderServiceOrders();
+      if(document.querySelector('#completedOrders')?.classList.contains('active'))renderCompletedOrders();
+    }catch{}
+  }
+  const localChangeOrderStatus=changeOrderStatus;
+  changeOrderStatus=async function(id,status){localChangeOrderStatus(id,status);const order=(state().orders||[]).find(item=>item.id===id);if(order?.trackingToken)await fetch(`/api/orders/${encodeURIComponent(order.trackingToken)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})})};
+  document.addEventListener('click',event=>{const button=event.target.closest('.out-for-delivery,.complete-order');if(!button)return;const order=(state().orders||[]).find(item=>item.id===button.dataset.id),status=button.classList.contains('out-for-delivery')?'Saiu para entrega':'Finalizado';if(order?.trackingToken)fetch(`/api/orders/${encodeURIComponent(order.trackingToken)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})})},true);
+  syncCloudOrders();setInterval(syncCloudOrders,3000);
+</script>
 </body></html>

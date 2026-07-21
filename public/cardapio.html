@@ -482,4 +482,30 @@
       if(document.querySelector('#foodGallery'))return;const gallery=document.createElement('section');gallery.id='foodGallery';gallery.className='food-gallery';gallery.innerHTML='<div class="food-gallery-head"><div><span>Feito por nós</span><h3>Destaques da casa</h3></div><p>Um pouquinho do que preparamos para deixar seu pedido ainda mais gostoso.</p></div><div class="food-gallery-grid"><figure class="food-gallery-card"><img src="assets/macarronada-camarao-video-melhorada.png" alt="Macarronada de camarão" loading="lazy"><figcaption><strong>Macarronada de camarão</strong><small>Sabor e capricho</small></figcaption></figure><figure class="food-gallery-card"><img src="assets/combo-hamburguer-guarana-antarctica-200ml-v2.png" alt="Combo de hambúrguer com batata e Guaraná" loading="lazy"><figcaption><strong>Combos de hambúrguer</strong><small>Lanche completo</small></figcaption></figure><figure class="food-gallery-card"><img src="assets/hot-dogs-melhorados.png" alt="Hot dogs da casa" loading="lazy"><figcaption><strong>Combo de hot dogs</strong><small>Para compartilhar</small></figcaption></figure></div>';const anchor=document.querySelector('#hoursClientInfo')||document.querySelector('.info-grid');anchor?.insertAdjacentElement('afterend',gallery);
     })();
   </script>
+  <script>
+    /* Envia o pedido, registra o acompanhamento e mantém o WhatsApp completo. */
+    (function enableOrderTracking(){
+      const checkoutButton=document.querySelector('#checkout .primary');
+      if(checkoutButton)checkoutButton.textContent='Finalizar e enviar pelo WhatsApp';
+      const sendOrderToWhatsApp=sendWhatsApp;
+      sendWhatsApp=async function(){
+        if(checkoutButton?.disabled)return;
+        const before=(JSON.parse(localStorage.getItem('dellas-management-v3')||'null')?.orders||[]).length;
+        sendOrderToWhatsApp();
+        const management=JSON.parse(localStorage.getItem('dellas-management-v3')||'null'),order=management?.orders?.[management.orders.length-1];
+        if(!order||management.orders.length<=before)return;
+        if(checkoutButton){checkoutButton.disabled=true;checkoutButton.textContent='Criando acompanhamento…'}
+        try{
+          const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+          if(!response.ok)throw new Error('Falha ao registrar');
+          const result=await response.json();
+          order.id=result.id;order.orderCode=result.orderCode;order.trackingToken=result.trackingToken;order.status=result.status;localStorage.setItem('dellas-management-v3',JSON.stringify(management));
+          window.location.href=`/pedido?token=${encodeURIComponent(result.trackingToken)}`;
+        }catch{
+          if(checkoutButton){checkoutButton.disabled=false;checkoutButton.textContent='Finalizar e enviar pelo WhatsApp'}
+          alert('O pedido foi enviado pelo WhatsApp, mas a página de acompanhamento não pôde ser aberta.');
+        }
+      };
+    })();
+  </script>
 </body></html>
