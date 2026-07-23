@@ -169,20 +169,20 @@
   </script>
   <script>
     /* Cardápio administrado pelo novo painel de gestão. */
-    function syncManagedComponents(components){
+    function syncManagedComponents(components,availability={}){
       const specs=[['Massa','massa','radio',true],['Molho','molho','radio',true],['Ingrediente','ingredient','checkbox',false],['Finalização','final','radio',false],['Adicional','extra','checkbox',false]];
       specs.forEach(([group,name,type,required])=>{
         if(!Array.isArray(components[group]))return;
         const current=document.querySelector(`#pastaForm input[name="${name}"]`),options=group==='Ingrediente'?document.querySelector('#ingredients'):current?.closest('.options');if(!options)return;
         options.innerHTML='';
-        components[group].forEach((item,index)=>{const id=`managed-${name}-${index}`,wrap=document.createElement('span'),input=document.createElement('input'),label=document.createElement('label');wrap.className='option';input.type=type;input.name=name;input.id=id;input.value=item;if(required&&index===0)input.required=true;if(group==='Adicional'){const match=item.match(/\(\+R\$\s*([\d.,]+)\)/);input.dataset.price=match?String(Number(match[1].replace('.','').replace(',','.'))||0):'0'}label.htmlFor=id;label.textContent=item;wrap.append(input,label);options.append(wrap)});
+        components[group].filter(item=>availability[`${group}::${item}`]!==false).forEach((item,index)=>{const id=`managed-${name}-${index}`,wrap=document.createElement('span'),input=document.createElement('input'),label=document.createElement('label');wrap.className='option';input.type=type;input.name=name;input.id=id;input.value=item;if(required&&index===0)input.required=true;if(group==='Adicional'){const match=item.match(/\(\+R\$\s*([\d.,]+)\)/);input.dataset.price=match?String(Number(match[1].replace('.','').replace(',','.'))||0):'0'}label.htmlFor=id;label.textContent=item;wrap.append(input,label);options.append(wrap)});
         if(group==='Finalização'){const wrap=document.createElement('span'),input=document.createElement('input'),label=document.createElement('label');wrap.className='option';input.type='radio';input.name='final';input.id='semFinal';input.value='Sem finalização';input.checked=true;label.htmlFor='semFinal';label.textContent='Sem finalização';wrap.append(input,label);options.append(wrap)}
       });
     }
     const managementRaw=localStorage.getItem('dellas-management-v3');
     if(managementRaw){
       const management=JSON.parse(managementRaw),categoryTargets={p500:'pasta500',p750:'pasta750',extras:'extras',dogs:'dogs',drinks:'drinks'};
-      syncManagedComponents(management.components||{});
+      syncManagedComponents(management.components||{},management.componentAvailability||{});
       Object.values(categoryTargets).forEach(id=>document.querySelector('#'+id).innerHTML='');
       management.products.filter(product=>product.active&&!product.deleted).forEach(product=>{const target=document.querySelector('#'+categoryTargets[product.category]);if(!target)return;const pasta=product.category==='p500'||product.category==='p750',size=product.category==='p500'?'500 ml':'750 ml',description=product.description||'';target.insertAdjacentHTML('beforeend',pasta?card([product.name,product.price,description,size],true):card([product.name,product.price,description]))});
       const originalOpenPasta=openPasta;
@@ -364,7 +364,7 @@
       document.body.insertAdjacentHTML('beforeend',`<div id="comboModal" class="overlay"><div class="modal"><div class="modal-head"><div><h3 id="comboTitle">Monte seu combo</h3><span id="comboSubtitle">Faça suas escolhas</span></div><button class="close" type="button" onclick="closeModal('comboModal')">×</button></div><form id="comboForm" class="combo-modal-form"><div id="comboFields" class="combo-builder"></div><div class="combo-price-preview"><span>Total</span><span id="comboPrice"></span></div><button class="primary">Adicionar ao pedido</button></form></div></div>`);
       const modal=document.querySelector('#comboModal'),form=document.querySelector('#comboForm'),fields=document.querySelector('#comboFields');let activeCombo=null;
       const managed=()=>{try{return JSON.parse(localStorage.getItem('dellas-management-v3')||'null')}catch{return null}};
-      const options=(group,fallback)=>managed()?.components?.[group]?.filter(Boolean)||fallback;
+      const options=(group,fallback)=>{const data=managed(),source=data?.components?.[group];return Array.isArray(source)?source.filter(item=>item&&data?.componentAvailability?.[`${group}::${item}`]!==false):fallback};
       const safe=text=>String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       const checks=(name,items)=>`<div class="combo-checks">${items.map((item,index)=>`<span><input type="checkbox" name="${name}" id="${name}-${index}" value="${safe(item)}"><label for="${name}-${index}">${safe(item)}</label></span>`).join('')}</div>`;
       function pastaFields(){const flavors=['Frango','Calabresa','Carne Moída','Salsicha'],ingredients=options('Ingrediente',['Salsicha','Azeitona','Milho','Ervilha','Uva passa','Cheiro verde']),finishes=options('Finalização',['Queijo','Orégano','Pimenta biquinho']);return [1,2].map(number=>`<div class="combo-builder-box"><h4>Macarronada ${number}</h4><label class="field">Sabor<select class="combo-select" name="flavor${number}" required>${flavors.map(x=>`<option>${x}</option>`).join('')}</select></label><p class="combo-note"><strong>Massa:</strong> Espaguete · escolha até 3 ingredientes</p>${checks(`combo${number}ing`,ingredients)}<label class="field" style="margin-top:12px">Finalização<select class="combo-select" name="finish${number}" required>${finishes.map(x=>`<option>${safe(x)}</option>`).join('')}</select></label></div>`).join('')+`<p class="combo-note">Acompanha 1 Guaraná de 1 litro.</p>`}
@@ -421,9 +421,10 @@
         'Combo Premium':{price:39.9,count:1,size:750,limit:5,flavors:catalog.p750.map(item=>item[0]).filter(name=>!/^Camarão$/i.test(name)),includes:'10 mini salgados | Guaraná 1 L'},
         'Combo Família':{price:69.9,count:2,size:750,limit:5,flavors:catalog.p750.map(item=>item[0]).filter(name=>!/^Camarão$/i.test(name)),includes:'20 mini salgados | Guaraná 1 L'}
       };
-      const ingredientOptions=['Salsicha','Azeitona','Milho','Ervilha','Uva passa','Cheiro verde','Queijo','Pimenta do reino'];
-      const sauceOptions=['Branco','Rosê','Tomate'];
-      const finishOptions=['Queijo','Orégano','Pimenta biquinho','Sem finalização'];
+      const comboManagement=(()=>{try{return JSON.parse(localStorage.getItem('dellas-management-v3')||'null')}catch{return null}})(),availableOptions=(group,fallback)=>{const source=comboManagement?.components?.[group];return Array.isArray(source)?source.filter(item=>item&&comboManagement?.componentAvailability?.[`${group}::${item}`]!==false):fallback};
+      const ingredientOptions=availableOptions('Ingrediente',['Salsicha','Azeitona','Milho','Ervilha','Uva passa','Cheiro verde','Queijo','Pimenta do reino']);
+      const sauceOptions=availableOptions('Molho',['Branco','Rosê','Tomate']);
+      const finishOptions=[...availableOptions('Finalização',['Queijo','Orégano','Pimenta biquinho']),'Sem finalização'];
       const escapeHtml=value=>String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       document.body.insertAdjacentHTML('beforeend','<div id="featuredComboModal" class="overlay"><div class="modal"><div class="modal-head"><div><h3 id="featuredComboTitle">Monte seu combo</h3><span id="featuredComboSubtitle">Faça suas escolhas</span></div><button class="close" type="button" onclick="closeModal(\'featuredComboModal\')">×</button></div><form id="featuredComboForm" class="combo-modal-form"><div id="featuredComboFields" class="combo-builder"></div><div class="combo-price-preview"><span>Total</span><span id="featuredComboPrice"></span></div><button class="primary">Adicionar ao pedido</button></form></div></div>');
       const modal=document.querySelector('#featuredComboModal'),form=document.querySelector('#featuredComboForm'),fields=document.querySelector('#featuredComboFields');let active=null;
@@ -536,7 +537,7 @@
     /* Aplica categorias e produtos cadastrados na gestão central. */
     (async function loadManagedCatalog(){
       try{
-        const response=await fetch('/api/catalog',{cache:'no-store'}),data=await response.json(),managed=data.catalog;if(!managed)return;localStorage.setItem('dellas-management-v3',JSON.stringify({...managed,orders:JSON.parse(localStorage.getItem('dellas-management-v3')||'{}').orders||[]}));
+        const response=await fetch('/api/catalog',{cache:'no-store'}),data=await response.json(),managed=data.catalog;if(!managed)return;localStorage.setItem('dellas-management-v3',JSON.stringify({...managed,orders:JSON.parse(localStorage.getItem('dellas-management-v3')||'{}').orders||[]}));syncManagedComponents(managed.components||{},managed.componentAvailability||{});
         const targets={p500:'pasta500',p750:'pasta750',turbinado:'turbinados',extras:'extras',dogs:'dogs',drinks:'drinks'},categories=managed.categories||[],products=managed.products||[];
         categories.filter(category=>category.id!=='burger-breads').forEach(category=>{
           if(category.id==='combos'){const section=document.querySelector('#combosSection');if(!section)return;section.hidden=category.deleted||category.active===false;section.querySelector('.category-title h3').textContent=category.name;section.querySelector('.category-title small').textContent=category.subtitle||'';const comboItems=products.filter(product=>product.category==='combos');const aliases={'combo-economic':'Combo Econômico','combo-premium':'Combo Premium','combo-dellas':'Combo Dellas','combo-family':'Combo Família','combo-bauru':'Combo Bauru','combo-xburguer':'Combo X-Burguer','combo-xcalabresa':'Combo X-Calabresa','combo-hotdog':'Combo 2 Hot Dogs'};comboItems.forEach(product=>{const expected=aliases[product.id]||product.name;const item=[...section.querySelectorAll('.combo-card')].find(card=>card.querySelector('h4')?.textContent.trim()===expected||card.dataset.managedId===product.id);if(!item)return;item.dataset.managedId=product.id;item.hidden=product.deleted||product.active===false;item.querySelector('h4').textContent=product.name;item.querySelector('p').textContent=product.description||'';item.querySelector('.price').textContent=money(Number(product.price));const button=item.querySelector('button');if(button){button.dataset.name=product.name;button.dataset.price=String(product.price)}});return}
