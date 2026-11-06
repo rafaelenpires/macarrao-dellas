@@ -1,98 +1,84 @@
-# vinext-starter
+﻿# Macarrão Dellas
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Site de pedidos com cardápio público, painel de gestão e API. O projeto roda com vinext/Vite e publica no Cloudflare Workers.
 
-## Prerequisites
+## Requisitos
 
-- Node.js `>=22.13.0`
+- Node.js 22.13 ou superior
+- npm
 
-## Quick Start
+## Executar localmente
 
-```bash
-npm install
-npm run dev
-npm run build
-```
+    npm ci
+    npm run dev
 
-This starter does not use `wrangler.jsonc`.
+Para testar o Worker compilado, gere o build e inicie o preview local:
 
-## Included Shape
+    npm run build
+    npm run start
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+### Banco D1 local
 
-## Workspace Auth Headers
+As APIs de catálogo e pedidos precisam das tabelas D1. Depois de gerar o build, aplique as migrações no banco local (não remoto):
 
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
+    npm run build
+    npx wrangler d1 execute site-creator-d1 --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_far_firebrand.sql
+    npx wrangler d1 execute site-creator-d1 --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0001_cuddly_amphibian.sql
 
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
+Execute cada migração uma vez por banco local novo. Em seguida, use `npm run dev` ou `npm run start`.
 
-Treat the full name as optional and fall back to email when it is absent:
+## Comandos
 
-```tsx
-import { headers } from "next/headers";
+- `npm run build`: compila o site para publicação.
+- `npm run start`: serve localmente o build pelo runtime do Cloudflare Workers; requer `npm run build`.
+- `npm run lint`: verifica o código com ESLint.
+- `npm test`: executa os testes unitários de horários, telefone e autenticação.
+- `npm run auth:setup`: configura credenciais aleatórias para o preview local, sem sobrescrever arquivos existentes.
+- `npm run db:generate`: gera migrações após alterar o esquema do banco.
 
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
+## Validação
 
-  const displayName = fullName ?? email;
-  // ...
-}
-```
+Os testes unitários cobrem a lógica de horário em `America/Fortaleza`, inclusive virada de dia e abertura manual, além da validação de WhatsApp. Use `npm test`, `npm run lint` e `npm run build` para validar o código.
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+## Funcionamento e pedidos
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+Os horários semanais e o modo manual (automático, aberto ou fechado) ficam salvos no catálogo do D1. O site consulta o estado calculado no servidor usando o fuso `America/Fortaleza`; a API de pedidos repete a validação de funcionamento e disponibilidade dos produtos. O WhatsApp do cliente é obrigatório para qualquer pedido.
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+Os pedidos são gravados no D1 antes de oferecer a abertura do WhatsApp. Se não for possível abrir o aplicativo, o cliente pode tentar novamente pelo link exibido sem registrar outro pedido.
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+O gestor usa login próprio por e-mail e senha, com cookie de sessão assinado e protegido (`HttpOnly`, `SameSite=Strict` e `Secure` em HTTPS). A senha é derivada com PBKDF2 e não fica armazenada em texto puro. O acesso à página e às APIs administrativas exige uma sessão válida; o catálogo e o acompanhamento público de pedidos continuam públicos conforme necessário.
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+### Configurar o acesso local ao gestor
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+Na primeira configuração local, execute:
 
-## Useful Commands
+    npm run auth:setup
 
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+O comando adiciona a `.dev.vars` (ignorado pelo Git) o hash da senha e uma chave de sessão aleatória, sem substituir outras configurações. Ele mostra uma senha inicial uma única vez no terminal. Guarde-a em um gerenciador de senhas. Se as entradas `GESTOR_*` já existirem, o comando não as sobrescreve. Depois, inicie ou reinicie o preview:
 
-## Learn More
+    npm run build
+    npm run start
 
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+Abra `/gestor` e entre com `rafaele.nascimento93@gmail.com` e a senha exibida pelo comando. A sessão expira após 12 horas; use **Sair** para encerrá-la no navegador. Para redefinir a senha local, remova somente as três entradas `GESTOR_*` de `.dev.vars` e execute `npm run auth:setup` novamente.
+
+O comando configura somente o ambiente local. Antes de publicar, configure no Cloudflare os segredos `GESTOR_EMAIL`, `GESTOR_PASSWORD_HASH` e `GESTOR_SESSION_SECRET` com valores próprios; não publique `.dev.vars` nem compartilhe senhas. Configure também limitação de requisições para o endpoint de login na borda do Cloudflare.
+
+## Pastas e arquivos
+
+- `app/`: rotas da API, autenticação e páginas do gestor.
+- `public/cardapio.html`: cardápio e montagem dos pedidos.
+- `public/assets/`: imagens e recursos visuais.
+- `db/`: esquema e acesso tipado ao banco D1.
+- `drizzle/`: migrações SQL do banco.
+- `worker/`: entrada do Cloudflare Worker.
+- `build/` e `vite.config.ts`: empacotamento e configuração da publicação.
+- `.openai/hosting.json`: configura a publicação e vincula o D1 `DB`.
+
+## Banco de dados
+
+O site está configurado para Cloudflare D1, um banco SQLite gerenciado. `db/schema.ts` define as tabelas `orders` (pedidos e acompanhamento) e `settings` (catálogo, horários e disponibilidade). As rotas em `app/api/` leem e gravam esses dados. As migrações necessárias estão em `drizzle/`.
+
+## Gestor
+
+O painel fica em `/gestor`. A autenticação e as permissões de edição são verificadas no código do gestor e nas rotas da API.
+\n

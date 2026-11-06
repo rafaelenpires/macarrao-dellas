@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Entrar | Gestão Macarrão Dellas</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:#f6eddd;color:#321014;font-family:Arial,sans-serif}.card{width:min(420px,100%);padding:30px;background:#fffaf1;border:1px solid #ead8b6;border-radius:18px;box-shadow:0 18px 48px #31040d18}.brand{margin:0 0 8px;color:#a6301f;font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}.card h1{margin:0;font:700 32px Georgia,serif}.intro{margin:10px 0 24px;color:#7a5c50;line-height:1.5}.field{display:grid;gap:7px;margin:15px 0;color:#705246;font-size:12px;font-weight:700}.field input{width:100%;padding:12px;border:1px solid #d9bf91;border-radius:8px;background:#fffdf8;color:#321014;font:16px Arial,sans-serif}.field input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #ad6d1b;outline-offset:2px}.submit{width:100%;margin-top:8px;padding:13px;border:0;border-radius:9px;background:#4b0912;color:#fff5df;font-size:14px;font-weight:700;cursor:pointer}.submit:disabled{opacity:.65;cursor:wait}.error{min-height:22px;margin:12px 0 0;color:#9c2c1e;font-size:13px;line-height:1.4}.back{display:inline-block;margin-top:18px;color:#8e2017;font-size:13px;font-weight:700}#setupWarning{display:none;margin:0 0 14px;padding:11px;border:1px solid #dfbd76;border-radius:8px;background:#fff3da;color:#5e421f;font-size:13px;line-height:1.45}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <p class="brand">Macarrão Dellas</p>
+    <h1>Acesso ao gestor</h1>
+    <p class="intro">Entre com o e-mail autorizado e a senha de gestão.</p>
+    <p id="setupWarning" role="status">A autenticação ainda não foi configurada neste ambiente. No terminal do projeto, execute <code>npm run auth:setup</code> e reinicie o preview.</p>
+    <form id="loginForm">
+      <label class="field">E-mail
+        <input name="email" type="email" autocomplete="username" required maxlength="254" autofocus>
+      </label>
+      <label class="field">Senha
+        <input name="password" type="password" autocomplete="current-password" required maxlength="256">
+      </label>
+      <button class="submit" type="submit">Entrar</button>
+      <p class="error" id="loginError" role="alert" aria-live="polite"></p>
+    </form>
+    <a class="back" href="/cardapio">Voltar ao cardápio</a>
+  </main>
+  <script>
+    const form=document.querySelector('#loginForm'),error=document.querySelector('#loginError'),button=form.querySelector('button');
+    form.addEventListener('submit',async event=>{
+      event.preventDefault();error.textContent='';button.disabled=true;
+      try{
+        const response=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({email:form.elements.email.value,password:form.elements.password.value})});
+        const body=await response.json().catch(()=>({}));
+        if(response.status===503){document.querySelector('#setupWarning').style.display='block';throw new Error(body.error||'Configure a autenticação local para continuar.')}
+        if(!response.ok)throw new Error(body.error||'Não foi possível entrar.');
+        location.replace('/gestor');
+      }catch(reason){error.textContent=reason instanceof Error?reason.message:'Não foi possível entrar. Tente novamente.'}
+      finally{button.disabled=false}
+    });
+  </script>
+</body>
+</html>

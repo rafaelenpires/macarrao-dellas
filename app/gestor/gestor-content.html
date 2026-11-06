@@ -12,7 +12,7 @@
   @media(max-width:920px){.product,.add-form{grid-template-columns:1fr 1fr}}
   @media(max-width:520px){.product,.add-form{grid-template-columns:1fr}}
 </style></head><body>
-<header class="top"><div class="brand"><b></b><div>Macarrão Dellas<small>Central de gestão</small></div></div><a href="index.html">Abrir cardápio</a></header>
+<header class="top"><div class="brand"><b></b><div>Macarrão Dellas<small>Central de gestão</small></div></div><div style="display:flex;gap:8px;align-items:center"><a href="/cardapio">Abrir cardápio</a><button id="managerLogout" class="small" type="button">Sair</button></div></header>
 <div class="shell"><aside><div class="side-title">Cardápio</div><button class="nav active" data-panel="menu" data-cat="p500">Macarrão 500 ml <em>editar</em></button><button class="nav" data-panel="menu" data-cat="p750">Macarrão 750 ml <em>editar</em></button><button class="nav" data-panel="menu" data-cat="extras">Novidades & petiscos <em>editar</em></button><button class="nav" data-panel="menu" data-cat="dogs">Hot dogs <em>editar</em></button><button class="nav" data-panel="menu" data-cat="drinks">Bebidas <em>editar</em></button><div class="side-title">Operação</div><button class="nav" data-panel="components">Complementos da massa</button><button class="nav" data-panel="drivers">Entregadores</button></aside>
 <main class="content"><section id="menu" class="panel active"><div class="eyebrow">Cardápio</div><div class="heading"><div><h1 id="categoryName">Macarrão 500 ml</h1><p id="categoryText">Edite itens, preços e descrições ou inclua um novo sabor.</p></div></div><div class="metrics"><article class="metric dark"><span>Itens ativos nesta categoria</span><strong id="activeCount">0</strong></article><article class="metric"><span>Itens cadastrados</span><strong id="categoryCount">0</strong></article><article class="metric"><span>Itens apagados</span><strong id="deletedCount">0</strong></article><article class="metric"><span>Próxima ação</span><strong style="font-size:1.22rem;margin-top:12px">Editar e salvar</strong></article></div><section class="card"><div class="category-bar"><div><h2>Itens da categoria</h2><p>Edite a descrição e ela aparecerá abaixo do nome do prato no cardápio.</p></div></div><div id="productList" class="product-list"></div><form id="addProductForm" class="add-form"><label class="field">Novo item<input id="newName" required placeholder="Ex.: Camarão + bacon"></label><label class="field">Descrição<input id="newDescription" placeholder="Ex.: Cremoso, com camarão e tempero da casa"></label><label class="field">Preço<input id="newPrice" required inputmode="decimal" placeholder="0,00"></label><label class="field">Disponibilidade<select id="newActive"><option value="true">Disponível</option><option value="false">Indisponível</option></select></label><button class="primary">Adicionar</button></form></section><section id="pastaSetup" class="setup"><h3 id="setupTitle">Montagem da massa</h3><p class="hint">Escolha o que o cliente poderá selecionar nesse sabor. Isso deixa cada prato totalmente configurável.</p><div id="setupChecks"></div><button id="savePastaSetup" class="primary" style="margin-top:15px">Salvar montagem</button></section></section>
 <section id="components" class="panel"><div class="eyebrow">Montagem</div><div class="heading"><div><h1>Complementos da massa</h1><p>Cadastre, renomeie ou apague ingredientes e opções. Eles ficam disponíveis para associar a cada sabor de macarronada.</p></div></div><div id="componentGrid" class="component-grid"></div></section>
@@ -42,10 +42,12 @@ document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>
   renderMenu();
 </script>
 <script>
-    /* Disponibilidade individual dos complementos. */
+    const defaultPastaDrinkAvailability={"Coca-Cola Original":true,"Coca-Cola Zero":true,Sprite:true,"S?o Geraldo":true,"Fanta Laranja":true,"Fanta Uva":true};
+  const pastaDrinkStatus=()=>({...defaultPastaDrinkAvailability,...(state().pastaDrinkAvailability||{})});
+  /* Disponibilidade individual dos complementos. */
     const componentStatus=()=>state().componentAvailability||JSON.parse(localStorage.getItem('dellasComponentAvailability')||'{}');
     function componentKey(group,name){return `${group}::${name}`}
-    function renderComponents(){const s=state(),status=componentStatus(),root=document.querySelector('#componentGrid');root.innerHTML=Object.entries(s.components).map(([group,items])=>`<section class="component-group"><h3>${group}</h3>${items.map((item,i)=>`<div class="component-row"><input data-group="${group}" data-index="${i}" value="${item}"><label class="switch" style="padding:0"><input class="component-active" data-group="${group}" data-name="${item}" type="checkbox" ${status[componentKey(group,item)]!==false?'checked':''}> Ativo</label><button class="small danger component-delete" data-group="${group}" data-index="${i}">Apagar</button></div>`).join('')}<div class="component-add"><input data-add="${group}" placeholder="Novo item"><button class="small component-add-btn" data-group="${group}">Adicionar</button></div></section>`).join('');root.querySelectorAll('.component-row input:not(.component-active)').forEach(input=>input.addEventListener('change',e=>{const old=s.components[e.target.dataset.group][e.target.dataset.index],next=e.target.value.trim();s.components[e.target.dataset.group][e.target.dataset.index]=next;const saved=componentStatus();if(saved[componentKey(e.target.dataset.group,old)]===false){delete saved[componentKey(e.target.dataset.group,old)];saved[componentKey(e.target.dataset.group,next)]=false;localStorage.setItem('dellasComponentAvailability',JSON.stringify(saved));s.componentAvailability=saved}save(s);renderComponents()}));root.querySelectorAll('.component-active').forEach(input=>input.addEventListener('change',e=>{const saved=componentStatus();saved[componentKey(e.target.dataset.group,e.target.dataset.name)]=e.target.checked;s.componentAvailability=saved;localStorage.setItem('dellasComponentAvailability',JSON.stringify(saved));save(s)}));root.querySelectorAll('.component-delete').forEach(btn=>btn.addEventListener('click',()=>{s.components[btn.dataset.group].splice(btn.dataset.index,1);save(s);renderComponents()}));root.querySelectorAll('.component-add-btn').forEach(btn=>btn.addEventListener('click',()=>{const input=root.querySelector(`[data-add="${btn.dataset.group}"]`);if(input.value.trim()){s.components[btn.dataset.group].push(input.value.trim());save(s);renderComponents()}}));}
+    function renderComponents(){const s=state(),status=componentStatus(),root=document.querySelector('#componentGrid');root.innerHTML=Object.entries(s.components).map(([group,items])=>`<section class="component-group"><h3>${group}</h3>${items.map((item,i)=>`<div class="component-row"><input data-group="${group}" data-index="${i}" value="${item}"><label class="switch" style="padding:0"><input class="component-active" data-group="${group}" data-name="${item}" type="checkbox" ${status[componentKey(group,item)]!==false?'checked':''}> Ativo</label><button class="small danger component-delete" data-group="${group}" data-index="${i}">Apagar</button></div>`).join('')}<div class="component-add"><input data-add="${group}" placeholder="Novo item"><button class="small component-add-btn" data-group="${group}">Adicionar</button></div></section>`).join('')+`<section class="component-group"><h3>Bebidas na montagem</h3>${Object.entries(pastaDrinkStatus()).map(([name,active])=>`<div class="component-row"><span>${name}</span><label class="switch" style="padding:0"><input class="pasta-drink-active" data-name="${name}" type="checkbox" ${active?'checked':''}> Ativa</label></div>`).join('')}</section>`;root.querySelectorAll('.component-row input:not(.component-active):not(.pasta-drink-active)').forEach(input=>input.addEventListener('change',e=>{const old=s.components[e.target.dataset.group][e.target.dataset.index],next=e.target.value.trim();s.components[e.target.dataset.group][e.target.dataset.index]=next;const saved=componentStatus();if(saved[componentKey(e.target.dataset.group,old)]===false){delete saved[componentKey(e.target.dataset.group,old)];saved[componentKey(e.target.dataset.group,next)]=false;localStorage.setItem('dellasComponentAvailability',JSON.stringify(saved));s.componentAvailability=saved}save(s);renderComponents()}));root.querySelectorAll('.pasta-drink-active').forEach(input=>input.addEventListener('change',e=>{const saved=pastaDrinkStatus();saved[e.target.dataset.name]=e.target.checked;s.pastaDrinkAvailability=saved;save(s)}));root.querySelectorAll('.component-active').forEach(input=>input.addEventListener('change',e=>{const saved=componentStatus();saved[componentKey(e.target.dataset.group,e.target.dataset.name)]=e.target.checked;s.componentAvailability=saved;localStorage.setItem('dellasComponentAvailability',JSON.stringify(saved));save(s)}));root.querySelectorAll('.component-delete').forEach(btn=>btn.addEventListener('click',()=>{s.components[btn.dataset.group].splice(btn.dataset.index,1);save(s);renderComponents()}));root.querySelectorAll('.component-add-btn').forEach(btn=>btn.addEventListener('click',()=>{const input=root.querySelector(`[data-add="${btn.dataset.group}"]`);if(input.value.trim()){s.components[btn.dataset.group].push(input.value.trim());save(s);renderComponents()}}));}
     const priorSetup=openPastaSetup;openPastaSetup=function(id){priorSetup(id);const status=componentStatus();document.querySelectorAll('#setupChecks input').forEach(input=>{if(status[componentKey(input.dataset.group,input.value)]===false)input.closest('label').style.display='none'})};renderComponents();
 </script>
 <script>
@@ -85,10 +87,10 @@ document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>
   document.querySelector('aside').insertAdjacentHTML('beforeend','<button class="nav" id="hoursNav">Horários de funcionamento</button>');
   document.querySelector('main').insertAdjacentHTML('beforeend','<section id="hours" class="panel"><div class="eyebrow">Funcionamento</div><div class="heading"><div><h1>Horários de funcionamento</h1><p>Marque os dias em que a loja abre e informe os horários. Essas informações aparecem para o cliente na página inicial.</p></div></div><section class="card"><div id="hoursList" class="product-list"></div><button id="saveHours" class="primary" style="margin-top:16px">Salvar horários</button></section></section>');
   const weekdays=['Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado','Domingo'];
-  const defaultHours=()=>weekdays.map((day,index)=>({day,open:index>=4,from:'',to:''}));
-  function renderHours(){const s=state();s.hours??=defaultHours();save(s);document.querySelector('#hoursList').innerHTML=s.hours.map((item,index)=>`<div class="product" style="grid-template-columns:1fr auto 140px 140px"><strong>${item.day}</strong><label class="switch">Aberto <input class="hour-open" data-index="${index}" type="checkbox" ${item.open?'checked':''}></label><label class="field">Abre<input class="hour-from" data-index="${index}" type="time" value="${item.from}"></label><label class="field">Fecha<input class="hour-to" data-index="${index}" type="time" value="${item.to}"></label></div>`).join('')}
+  const defaultHours=()=>weekdays.map((day,index)=>({day,open:index>=4,from:'18:00',to:'23:00'}));
+  function renderHours(){const s=state();s.hours??=defaultHours();document.querySelector('#hoursList').innerHTML=s.hours.map((item,index)=>`<div class="product" style="grid-template-columns:1fr auto 140px 140px"><strong>${item.day}</strong><label class="switch">Aberto <input class="hour-open" data-index="${index}" type="checkbox" ${item.open?'checked':''}></label><label class="field">Abre<input class="hour-from" data-index="${index}" type="time" value="${item.from||''}"></label><label class="field">Fecha<input class="hour-to" data-index="${index}" type="time" value="${item.to||''}"></label></div>`).join('')}
   document.querySelector('#hoursNav').addEventListener('click',()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));document.querySelector('#hoursNav').classList.add('active');document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));document.querySelector('#hours').classList.add('active');renderHours()});
-  document.querySelector('#saveHours').addEventListener('click',()=>{const s=state();s.hours??=defaultHours();document.querySelectorAll('.hour-open').forEach(input=>{const item=s.hours[input.dataset.index];item.open=input.checked;item.from=document.querySelector(`.hour-from[data-index="${input.dataset.index}"]`).value;item.to=document.querySelector(`.hour-to[data-index="${input.dataset.index}"]`).value});save(s);alert('Horários salvos com sucesso.')});
+  document.querySelector('#saveHours').addEventListener('click',async()=>{const s=state();s.hours??=defaultHours();document.querySelectorAll('.hour-open').forEach(input=>{const item=s.hours[input.dataset.index];item.open=input.checked;item.from=document.querySelector(`.hour-from[data-index="${input.dataset.index}"]`).value;item.to=document.querySelector(`.hour-to[data-index="${input.dataset.index}"]`).value});save(s);const button=document.querySelector('#saveHours');button.disabled=true;try{const response=await fetch('/api/catalog',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({hours:s.hours})});if(!response.ok)throw new Error();alert('Horários salvos e sincronizados com o cardápio.')}catch{alert('Os horários ficaram salvos neste dispositivo, mas não foi possível sincronizá-los. Tente novamente.')}finally{button.disabled=false}});
 </script>
 <script>
   /* Central de pedidos: atendimento, status, alerta e comanda térmica. */
@@ -270,8 +272,20 @@ document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>
   playOrderAlert=function(){if(!orderAlertsEnabled||!durableOrderAudio)return;try{const ctx=durableOrderAudio,now=ctx.currentTime;[0,.25,.5,.75].forEach((offset,index)=>{const oscillator=ctx.createOscillator(),gain=ctx.createGain();oscillator.type=index%2?'square':'sine';oscillator.frequency.value=index%2?880:660;gain.gain.setValueAtTime(.001,now+offset);gain.gain.exponentialRampToValueAtTime(.24,now+offset+.025);gain.gain.exponentialRampToValueAtTime(.001,now+offset+.2);oscillator.connect(gain).connect(ctx.destination);oscillator.start(now+offset);oscillator.stop(now+offset+.22)});const toast=document.querySelector('#orderAlertToast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),5000)}catch{soundButton.textContent='Clique para liberar o som'}};
   async function syncCloudOrders(){
     try{
-      const response=await fetch('/api/orders',{cache:'no-store'});if(!response.ok)return;
-      const cloud=(await response.json()).orders||[],s=state(),localById=new Map((s.orders||[]).map(order=>[order.id,order]));
+      const s=state(),asIsoDate=value=>{const text=String(value??'');const date=new Date(/[zZ]|[+-]\d\d:\d\d$/.test(text)?text:`${text.replace(' ','T')}Z`);return Number.isNaN(date.getTime())?text:date.toISOString()},existing=(s.orders||[]).map(order=>({...order,date:asIsoDate(order.date)})),latest=existing.reduce((value,order)=>!value||new Date(order.date)>new Date(value)?order.date:value,null);
+      let cloud=[];
+      if(latest){
+        for(let offset=0;offset<=100000;offset+=200){
+          const response=await fetch(`/api/orders?since=${encodeURIComponent(latest)}&limit=200&offset=${offset}`,{cache:'no-store'});if(!response.ok)return;
+          const batch=(await response.json()).orders||[];cloud.push(...batch);if(batch.length<200)break;
+        }
+      }else{
+        for(let offset=0;offset<=100000;offset+=200){
+          const response=await fetch(`/api/orders?limit=200&offset=${offset}`,{cache:'no-store'});if(!response.ok)return;
+          const batch=(await response.json()).orders||[];cloud.push(...batch);if(batch.length<200)break;
+        }
+      }
+      const localById=new Map(existing.map(order=>[order.id,order]));
       cloud.forEach(order=>localById.set(order.id,{...(localById.get(order.id)||{}),...order}));s.orders=[...localById.values()].sort((a,b)=>new Date(a.date)-new Date(b.date));save(s);checkIncomingOrders();
       if(document.querySelector('#orders')?.classList.contains('active'))renderServiceOrders();
       if(document.querySelector('#completedOrders')?.classList.contains('active'))renderCompletedOrders();
@@ -289,15 +303,15 @@ document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>
 <script>
   /* Categorias editáveis e catálogo sincronizado com o cardápio público. */
   (function setupCategoryManagement(){
-    const defaultCategories=[{id:'combos',name:'Combos em destaque',subtitle:'As melhores opções para cada tamanho de fome',active:true},{id:'burger-breads',name:'Pães dos hambúrgueres',subtitle:'Opções disponíveis nos combos de hambúrguer',active:true,managementOnly:true},{id:'p500',name:'Macarrão 500 ml',subtitle:'Serve 1 pessoa',active:true},{id:'p750',name:'Macarrão grande 750 ml',subtitle:'Capricho em tamanho grande',active:true},{id:'turbinado',name:'Turbinado · 750 ml',subtitle:'Três proteínas para uma fome de respeito',active:true},{id:'extras',name:'Novidades & petiscos',subtitle:'Para completar seu pedido',active:true},{id:'dogs',name:'Hot dogs',subtitle:'Rápidos e gostosos',active:false},{id:'drinks',name:'Bebidas',subtitle:'Latas de 350 ml',active:true}];
+    const defaultCategories=[{id:'combos',name:'Combos em destaque',subtitle:'As melhores opções para cada tamanho de fome',active:false},{id:'burger-breads',name:'Pães dos hambúrgueres',subtitle:'Opções disponíveis nos combos de hambúrguer',active:true,managementOnly:true},{id:'p500',name:'Macarrão 500 ml',subtitle:'Serve 1 pessoa',active:true},{id:'p750',name:'Macarrão grande 750 ml',subtitle:'Capricho em tamanho grande',active:false},{id:'turbinado',name:'Turbinado · 750 ml',subtitle:'Três proteínas para uma fome de respeito',active:false},{id:'extras',name:'Novidades & petiscos',subtitle:'Para completar seu pedido',active:false},{id:'dogs',name:'Hot dogs',subtitle:'Rápidos e gostosos',active:false},{id:'drinks',name:'Bebidas',subtitle:'Latas de 350 ml',active:false}];
     const comboProducts=[['combo-economic','Combo Econômico',24.9,'Macarrão 500 ml + Guaraná 200 ml. Frete grátis para o Planalto Ayrton Senna.','featured-economic'],['combo-premium','Combo Premium',39.9,'Macarrão 750 ml + 10 mini salgados + Guaraná 1 L.','featured-premium'],['combo-dellas','Combo Dellas',39.9,'2 macarronadas de 500 ml, com sabores e montagem à sua escolha, mais Guaraná de 1 litro.','pasta'],['combo-family','Combo Família',69.9,'2 macarronadas 750 ml + Guaraná 1 L + 20 mini salgados.','featured-family'],['combo-bauru','Combo Bauru',24,'Carne, ovo, queijo, presunto, alface e tomate. Acompanha Guaraná 200 ml.','burger-bauru'],['combo-xburguer','Combo X-Burguer',22,'Carne, queijo, presunto, alface e tomate. Acompanha Guaraná 200 ml.','burger-xburguer'],['combo-xcalabresa','Combo X-Calabresa',24,'Carne, queijo, calabresa, alface e tomate. Acompanha Guaraná 200 ml.','burger-xcalabresa'],['combo-hotdog','Combo 2 Hot Dogs',30,'2 hot dogs, 8 salgadinhos variados e batata frita.','hotdog']];
     const turbinadoProducts=[['Frango + Bacon + Calabresa',34.9],['Carne de Sol + Bacon + Calabresa',39.9],['Carne Moída + Bacon + Calabresa',36.9]];
-    const ensureCategories=s=>{s.categories??=[];defaultCategories.forEach(item=>{if(!s.categories.some(category=>category.id===item.id))s.categories.push(structuredClone(item))});const combos=s.categories.find(category=>category.id==='combos');if(combos)delete combos.fixedProducts;s.products??=[];turbinadoProducts.forEach(([name,price],index)=>{if(!s.products.some(product=>product.category==='turbinado'&&product.name===name))s.products.push({id:`turbinado-${index}`,category:'turbinado',name,description:'Macarrão 750 ml turbinado com três proteínas.',price,active:true,components:null})});comboProducts.forEach(([id,name,price,description,comboType])=>{if(!s.products.some(product=>product.id===id||product.comboType===comboType))s.products.push({id,category:'combos',name,description,price,active:true,components:null,comboType})});[['bread-brioche','Pão brioche'],['bread-arabic','Pão árabe']].forEach(([id,name])=>{if(!s.products.some(product=>product.id===id))s.products.push({id,category:'burger-breads',name,description:'Opção de pão para os combos de hambúrguer.',price:0,active:true,components:null})});s.categories.forEach(category=>cats[category.id]=[category.name,category.subtitle]);return s.categories};
+    const ensureCategories=s=>{s.categories??=[];defaultCategories.forEach(item=>{if(!s.categories.some(category=>category.id===item.id))s.categories.push(structuredClone(item))});const combos=s.categories.find(category=>category.id==='combos');if(combos)delete combos.fixedProducts;s.products??=[];turbinadoProducts.forEach(([name,price],index)=>{if(!s.products.some(product=>product.category==='turbinado'&&product.name===name))s.products.push({id:`turbinado-${index}`,category:'turbinado',name,description:'Macarrão 750 ml turbinado com três proteínas.',price,active:false,components:null})});comboProducts.forEach(([id,name,price,description,comboType])=>{if(!s.products.some(product=>product.id===id||product.comboType===comboType))s.products.push({id,category:'combos',name,description,price,active:false,components:null,comboType})});[['bread-brioche','Pão brioche'],['bread-arabic','Pão árabe']].forEach(([id,name])=>{if(!s.products.some(product=>product.id===id))s.products.push({id,category:'burger-breads',name,description:'Opção de pão para os combos de hambúrguer.',price:0,active:true,components:null})});s.categories.forEach(category=>cats[category.id]=[category.name,category.subtitle]);return s.categories};
     let catalogSaveTimer=null;
-    const localSave=save;
-    const catalogPayload=s=>({categories:ensureCategories(s),products:s.products||[],components:s.components||{},componentAvailability:s.componentAvailability||componentStatus()});
+    const localSave=save;let cloudCatalogReady=false;
+    const catalogPayload=s=>({categories:ensureCategories(s),products:s.products||[],components:s.components||{},componentAvailability:s.componentAvailability||componentStatus(),pastaDrinkAvailability:pastaDrinkStatus(),hours:s.hours||defaultHours()});
     function persistCatalog(s){clearTimeout(catalogSaveTimer);catalogSaveTimer=setTimeout(()=>fetch('/api/catalog',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(catalogPayload(s))}).catch(()=>{}),350)}
-    save=function(s){localSave(s);persistCatalog(s)};
+    save=function(s){localSave(s);if(cloudCatalogReady)persistCatalog(s)};
     const operationTitle=[...document.querySelectorAll('.side-title')].find(item=>item.textContent.includes('Opera'));
     operationTitle?.insertAdjacentHTML('beforebegin','<button class="nav" id="categoriesNav">Categorias <em>gerenciar</em></button>');
     document.querySelector('main').insertAdjacentHTML('beforeend','<section id="categoryManagerPanel" class="panel"><div class="eyebrow">Cardápio</div><div class="heading"><div><h1>Categorias</h1><p>Crie, renomeie, oculte ou exclua categorias e abra cada uma para editar seus produtos.</p></div></div><section class="card"><div id="categoryManager" class="category-manager"></div><form id="addCategoryForm" class="add-form" style="grid-template-columns:1fr 1.5fr auto"><label class="field">Nova categoria<input id="newCategoryName" required placeholder="Ex.: Sobremesas"></label><label class="field">Descrição curta<input id="newCategorySubtitle" placeholder="Ex.: Para adoçar seu pedido"></label><button class="primary">Adicionar categoria</button></form></section></section>');
@@ -307,8 +321,182 @@ document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>
     function renderCategoryManager(){const s=state(),categories=ensureCategories(s).filter(category=>!category.deleted);manager.innerHTML=categories.map(category=>`<div class="category-edit-row"><label class="field">Nome<input class="category-name" data-id="${category.id}" value="${descriptionValue(category.name)}"></label><label class="field">Descrição<input class="category-subtitle" data-id="${category.id}" value="${descriptionValue(category.subtitle||'')}"></label><label class="switch">Visível <input class="category-active" data-id="${category.id}" type="checkbox" ${category.active!==false?'checked':''}></label>${category.fixedProducts?'<span class="hint">Produtos com montagem especial</span>':`<button class="small open-category" data-id="${category.id}">Editar produtos</button>`}<button class="small danger delete-category" data-id="${category.id}">Excluir</button></div>`).join('');manager.querySelectorAll('.category-name,.category-subtitle,.category-active').forEach(input=>input.addEventListener('change',()=>{const category=s.categories.find(item=>item.id===input.dataset.id);if(input.classList.contains('category-active'))category.active=input.checked;else if(input.classList.contains('category-name'))category.name=input.value.trim();else category.subtitle=input.value.trim();cats[category.id]=[category.name,category.subtitle];save(s);renderCategoryNav();renderCategoryManager()}));manager.querySelectorAll('.open-category').forEach(button=>button.addEventListener('click',()=>openCategory(button.dataset.id)));manager.querySelectorAll('.delete-category').forEach(button=>button.addEventListener('click',()=>{const category=s.categories.find(item=>item.id===button.dataset.id);if(!confirm(`Excluir a categoria “${category.name}” e todos os produtos dela?`))return;category.deleted=true;(s.products||[]).filter(product=>product.category===category.id).forEach(product=>product.deleted=true);save(s);renderCategoryNav();renderCategoryManager()}))}
     document.querySelector('#categoriesNav')?.addEventListener('click',()=>{document.querySelectorAll('.nav').forEach(item=>item.classList.remove('active'));document.querySelector('#categoriesNav').classList.add('active');document.querySelectorAll('.panel').forEach(item=>item.classList.remove('active'));document.querySelector('#categoryManagerPanel').classList.add('active');renderCategoryManager()});
     document.querySelector('#addCategoryForm').addEventListener('submit',event=>{event.preventDefault();const s=state(),name=document.querySelector('#newCategoryName').value.trim(),subtitle=document.querySelector('#newCategorySubtitle').value.trim();if(!name)return;const id=`custom-${Date.now()}`;ensureCategories(s).push({id,name,subtitle,active:true});cats[id]=[name,subtitle];save(s);event.target.reset();renderCategoryNav();renderCategoryManager()});
-    async function loadCloudCatalog(){try{const response=await fetch('/api/catalog',{cache:'no-store'}),data=await response.json(),s=state();if(data.catalog){s.categories=data.catalog.categories;s.products=data.catalog.products;s.components=data.catalog.components||s.components;s.componentAvailability=data.catalog.componentAvailability||s.componentAvailability||{};ensureCategories(s);localSave(s);persistCatalog(s)}else{ensureCategories(s);persistCatalog(s)}renderCategoryNav();renderCategoryManager();renderMenu();renderComponents()}catch{const s=state();ensureCategories(s);renderCategoryNav();renderCategoryManager()}}
-    loadCloudCatalog();
+    async function loadCloudCatalog(){
+      try{
+        const response=await fetch('/api/catalog',{cache:'no-store'}),data=await response.json();
+        if(data.catalog){
+          const s={...data.catalog};s.orders=state().orders||[];s.deliveryControl=state().deliveryControl||s.deliveryControl;s.hours=data.catalog.hours||state().hours;
+          s.pastaDrinkAvailability=data.catalog.pastaDrinkAvailability||s.pastaDrinkAvailability||{};
+          ensureCategories(s);localSave(s);cloudCatalogReady=true;
+          if(!data.catalog.hours)persistCatalog(s);
+        }else{
+          const s=state();ensureCategories(s);cloudCatalogReady=true;persistCatalog(s);
+        }
+        renderCategoryNav();renderCategoryManager();renderMenu();renderComponents();renderHours();
+      }catch{const s=state();ensureCategories(s);renderCategoryNav();renderCategoryManager()}
+    }
+    window.addEventListener('focus',()=>loadCloudCatalog());
+    setInterval(loadCloudCatalog,15000);    loadCloudCatalog();
   })();
+</script>
+<script>
+  (function manageBusinessOverride(){
+    const hoursPanel=document.querySelector('#hours');
+    const hoursCard=hoursPanel?.querySelector('.card');
+    if(!hoursCard)return;
+    hoursCard.insertAdjacentHTML('afterbegin',`<section id="businessOverrideControl" class="card" style="margin-bottom:16px"><div class="category-bar"><div><h2>Funcionamento do delivery</h2><p>O modo manual permanece salvo até você retornar ao automático.</p></div></div><div style="display:flex;gap:12px;align-items:end;flex-wrap:wrap"><label class="field">Modo<select id="businessOverride"><option value="auto">Automático pelos horários</option><option value="open">Abrir manualmente</option><option value="closed">Fechar manualmente</option></select></label><button id="saveBusinessOverride" class="primary">Salvar funcionamento</button></div><p id="businessOverrideStatus" role="status" aria-live="polite"></p></section>`);
+    const selector=document.querySelector('#businessOverride');
+    const statusText=document.querySelector('#businessOverrideStatus');
+    async function refresh(){
+      try{
+        const response=await fetch('/api/business-status',{cache:'no-store'});
+        if(!response.ok)throw new Error('Não foi possível consultar o funcionamento.');
+        const status=await response.json();
+        selector.value=status.manualOverride;
+        statusText.textContent=`${status.label} — ${status.message}`;
+      }catch{
+        statusText.textContent='Não foi possível consultar o funcionamento. Verifique a conexão e tente novamente.';
+      }
+    }
+    document.querySelector('#saveBusinessOverride').addEventListener('click',async event=>{
+      const button=event.currentTarget;
+      button.disabled=true;
+      statusText.textContent='Salvando funcionamento…';
+      try{
+        const response=await fetch('/api/business-status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({manualOverride:selector.value})});
+        const body=await response.json().catch(()=>({}));
+        if(!response.ok)throw new Error(body.error||'Não foi possível salvar.');
+        statusText.textContent=`${body.label} — ${body.message}`;
+      }catch(error){
+        statusText.textContent=error instanceof Error?error.message:'Não foi possível salvar o funcionamento.';
+      }finally{
+        button.disabled=false;
+      }
+    });
+    const saveHours=document.querySelector('#saveHours');
+    saveHours?.addEventListener('click',()=>{
+      const timer=setInterval(()=>{
+        if(saveHours.disabled)return;
+        clearInterval(timer);
+        refresh();
+      },100);
+    });
+    refresh();
+    setInterval(refresh,15000);
+    window.addEventListener('focus',refresh);
+  })();
+</script>
+<script>
+  (function useFortalezaDates(){
+    const nativeToLocaleString=Date.prototype.toLocaleString;
+    Date.prototype.toLocaleString=function(locales,options){
+      return nativeToLocaleString.call(this,locales,{...options,timeZone:options?.timeZone||'America/Fortaleza'});
+    };
+    const dateKey=date=>{
+      const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/Fortaleza',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date).map(part=>[part.type,part.value]));
+      return `${parts.year}-${parts.month}-${parts.day}`;
+    };
+    const reportDate=document.querySelector('#reportDate');
+    if(reportDate)reportDate.value=dateKey(new Date());
+    window.orderInRange=function(order,range){
+      const date=new Date(order.date);
+      if(Number.isNaN(date.getTime()))return false;
+      const now=new Date();
+      const selected=document.querySelector('#reportDate')?.value;
+      if(range==='day')return dateKey(date)===(selected||dateKey(now));
+      if(range==='week')return now-date>=0&&now-date<=7*24*60*60*1000;
+      if(range==='month')return dateKey(date).slice(0,7)===dateKey(now).slice(0,7);
+      return true;
+    };
+    const addCustomerPhones=(container,orders)=>{
+      container.querySelectorAll('.product').forEach((card,index)=>{
+        const order=orders[index];
+        if(!order?.customerPhone)return;
+        const phone=document.createElement('div');
+        phone.className='hint';
+        const digits=String(order.customerPhone).replace(/\D/g,'');
+        phone.textContent=`WhatsApp: ${digits.length===11?`(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`:`(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`}`;
+        card.append(phone);
+      });
+    };
+    const renderServiceOrdersWithPhone=renderServiceOrders;
+    renderServiceOrders=function(){
+      renderServiceOrdersWithPhone();
+      addCustomerPhones(document.querySelector('#serviceOrderList'),[...(state().orders||[])].reverse());
+    };
+    const renderCompletedOrdersWithPhone=renderCompletedOrders;
+    renderCompletedOrders=function(){
+      renderCompletedOrdersWithPhone();
+      addCustomerPhones(document.querySelector('#completedOrderList'),[...(state().orders||[])].filter(order=>order.status==='Finalizado').reverse());
+    };
+  })();
+</script>
+<script>
+  (function configureEggExtra(){
+    const originalRenderComponents=renderComponents;
+    renderComponents=function(){
+      originalRenderComponents();
+      const s=state();
+      s.eggExtraPrice=Number.isFinite(Number(s.eggExtraPrice))?Number(s.eggExtraPrice):1;
+      s.eggExtraQuantityLimit=Number.isInteger(Number(s.eggExtraQuantityLimit))?Number(s.eggExtraQuantityLimit):99;
+      const section=document.createElement('section');
+      section.className='component-group';
+      section.innerHTML='<h3>Ovo de codorna</h3><div class="component-row"><label class="field">Preço por unidade<input id="eggExtraPrice" type="number" min="0" step="0.01"></label><label class="field">Limite por macarronada<input id="eggExtraQuantityLimit" type="number" min="0" max="99" step="1"></label><button id="saveEggExtra" class="small">Salvar</button></div><p id="eggExtraStatus" role="status" aria-live="polite"></p>';
+      const root=document.querySelector('#componentGrid');
+      root.append(section);
+      section.querySelector('#eggExtraPrice').value=String(s.eggExtraPrice);
+      section.querySelector('#eggExtraQuantityLimit').value=String(s.eggExtraQuantityLimit);
+      section.querySelector('#saveEggExtra').addEventListener('click',async event=>{
+        const price=Number(section.querySelector('#eggExtraPrice').value);
+        const limit=Number(section.querySelector('#eggExtraQuantityLimit').value);
+        const status=section.querySelector('#eggExtraStatus');
+        if(!Number.isFinite(price)||price<0||!Number.isInteger(limit)||limit<0||limit>99){
+          status.textContent='Informe um preço válido e um limite inteiro entre 0 e 99.';
+          return;
+        }
+        const button=event.currentTarget;
+        button.disabled=true;
+        s.eggExtraPrice=price;
+        s.eggExtraQuantityLimit=limit;
+        save(s);
+        try{
+          const response=await fetch('/api/catalog',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({eggExtraPrice:price,eggExtraQuantityLimit:limit})});
+          const body=await response.json().catch(()=>({}));
+          if(!response.ok)throw new Error(body.error||'Não foi possível salvar.');
+          status.textContent='Preço e limite do ovo de codorna salvos.';
+        }catch(error){
+          status.textContent=error instanceof Error?`${error.message} As alterações permanecem salvas neste dispositivo.`:'Não foi possível sincronizar com o servidor.';
+        }finally{
+          button.disabled=false;
+        }
+      });
+    };
+    renderComponents();
+    fetch('/api/catalog',{cache:'no-store'}).then(async response=>{
+      if(!response.ok)throw new Error('Não foi possível carregar as configurações atuais.');
+      const {catalog}=await response.json();
+      if(!catalog)return;
+      const price=Number(catalog.eggExtraPrice);
+      const limit=Number(catalog.eggExtraQuantityLimit);
+      if(Number.isFinite(price)&&price>=0)document.querySelector('#eggExtraPrice').value=String(price);
+      if(Number.isInteger(limit)&&limit>=0&&limit<=99)document.querySelector('#eggExtraQuantityLimit').value=String(limit);
+    }).catch(error=>{
+      document.querySelector('#eggExtraStatus').textContent=error instanceof Error?error.message:'Não foi possível carregar as configurações.';
+    });
+  })();
+</script>
+<script>
+  document.querySelector('#managerLogout').addEventListener('click',async event=>{
+    const button=event.currentTarget;
+    button.disabled=true;
+    try{
+      const response=await fetch('/api/auth/logout',{method:'POST',credentials:'same-origin'});
+      if(!response.ok)throw new Error('Não foi possível encerrar a sessão.');
+      location.replace('/gestor');
+    }catch(error){
+      button.disabled=false;
+      alert(error instanceof Error?error.message:'Não foi possível encerrar a sessão. Tente novamente.');
+    }
+  });
 </script>
 </body></html>

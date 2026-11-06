@@ -44,10 +44,10 @@
   <header class="hero"><nav><div class="brand"><i class="dot"></i>Macarrão Dellas</div><div class="nav-actions"><div id="openStatus" class="open-status" role="status" aria-live="polite"><i class="status-light"></i><span>Verificando...</span></div><a class="cart-button" href="#cardapio">Ver cardápio</a></div></nav><div class="hero-grid"><div class="logo-wrap"><img class="logo" src="assets/logo-cropped.png" alt="Macarrão Dellas"></div><div class="hero-copy"><div class="eyebrow">Delivery</div><h1>Massas, lanches<br>e muito <em>sabor.</em></h1><a class="hero-social" href="https://instagram.com/macarraodellas" target="_blank" rel="noopener">macarraodellas</a></div><aside class="service-brief"><strong>Dias de funcionamento</strong><p id="hoursClientInfo"><b>Sexta, sábado e domingo</b><br>Consulte aqui se estamos abertos agora.</p></aside></div></header>
   <main id="cardapio" class="menu"><div class="section-head"><span>Escolha, monte e peça</span><h2>Nosso cardápio</h2><p>Escolha seus favoritos, personalize as massas e envie o pedido completo pelo WhatsApp.</p></div><div class="info-grid"><aside class="notice"><b>Atendimento</b> Trabalhamos apenas com delivery e retirada. Entrega própria no Planalto Ayrton Senna, Renascer, Cidade Nova e Arvoredo; para outros bairros, enviamos via Uber Flash.</aside><aside class="condo-notice"><b>Entregas em condomínio</b><strong>Nosso entregador leva o pedido somente até a portaria.</strong></aside></div><section class="category"><div class="category-title"><h3>Macarrão 500 ml</h3><small>Serve 1 pessoa</small></div><div class="grid" id="pasta500"></div></section><section class="category"><div class="category-title"><h3>Macarrão grande 750 ml</h3><small>Capricho em tamanho grande</small></div><div class="grid" id="pasta750"></div></section><section class="category"><div class="category-title"><h3>Novidades & petiscos</h3><small>Para completar seu pedido</small></div><div class="grid" id="extras"></div></section><section class="category"><div class="category-title"><h3>Hot dogs</h3><small>Rápidos e gostosos</small></div><div class="grid" id="dogs"></div></section><section class="category"><div class="category-title"><h3>Bebidas</h3><small>Latas de 350 ml</small></div><div class="grid" id="drinks"></div></section></main>
   <button class="primary cart-float" onclick="openCart()">Meu pedido <span id="count" class="badge">0</span></button>
-  <div id="pastaModal" class="overlay"><div class="modal"><div class="modal-head"><div><h3 id="pastaTitle">Monte sua massa</h3><span id="pastaPrice" class="price"></span></div><button class="close" onclick="closeModal('pastaModal')">×</button></div><form id="pastaForm"><div class="choice"><h5>Massa <span>• escolha 1</span></h5><div class="options"><span class="option"><input required type="radio" name="massa" id="talharim" value="Talharim"><label for="talharim">Talharim</label></span><span class="option"><input type="radio" name="massa" id="espaguete" value="Espaguete"><label for="espaguete">Espaguete</label></span></div></div><div class="choice"><h5>Molho <span>• escolha 1</span></h5><div class="options"><span class="option"><input required type="radio" name="molho" id="branco" value="Branco"><label for="branco">Branco</label></span><span class="option"><input type="radio" name="molho" id="rose" value="Rosê"><label for="rose">Rosê</label></span><span class="option"><input type="radio" name="molho" id="tomate" value="Tomate"><label for="tomate">Tomate</label></span></div></div><div class="choice"><h5>Ingredientes <span>• até 5</span></h5><div class="options" id="ingredients"></div></div><div class="choice"><h5>Finalização <span>• até 1</span></h5><div class="options"><span class="option"><input type="radio" name="final" id="finalQueijo" value="Queijo"><label for="finalQueijo">Queijo</label></span><span class="option"><input type="radio" name="final" id="oregano" value="Orégano"><label for="oregano">Orégano</label></span><span class="option"><input type="radio" name="final" id="biquinho" value="Pimenta biquinho"><label for="biquinho">Pimenta biquinho</label></span><span class="option"><input type="radio" name="final" id="semFinal" value="Sem finalização" checked><label for="semFinal">Sem finalização</label></span></div></div><div class="choice"><h5>Adicionais <span>• escolha quantos quiser</span></h5><div class="options"><span class="option"><input type="checkbox" name="extra" id="ovo" value="Ovo de codorna (+R$ 1,00)" data-price="1"><label for="ovo">Ovo de codorna +R$ 1</label></span><span class="option"><input type="checkbox" name="extra" id="salsicha" value="Salsicha (+R$ 2,00)" data-price="2"><label for="salsicha">Salsicha +R$ 2</label></span><span class="option"><input type="checkbox" name="extra" id="calabresa" value="Calabresa (+R$ 3,00)" data-price="3"><label for="calabresa">Calabresa +R$ 3</label></span></div></div><button class="primary">Adicionar ao pedido</button></form></div></div>
+  <div id="pastaModal" class="overlay"><div class="modal"><div class="modal-head"><div><h3 id="pastaTitle">Monte sua massa</h3><span id="pastaPrice" class="price"></span></div><button class="close" onclick="closeModal('pastaModal')">×</button></div><form id="pastaForm"><div class="choice"><h5>Massa <span>• escolha 1</span></h5><div class="options"><span class="option"><input required type="radio" name="massa" id="talharim" value="Talharim"><label for="talharim">Talharim</label></span><span class="option"><input type="radio" name="massa" id="espaguete" value="Espaguete"><label for="espaguete">Espaguete</label></span></div></div><div class="choice"><h5>Molho <span>• escolha 1</span></h5><div class="options"><span class="option"><input required type="radio" name="molho" id="branco" value="Branco"><label for="branco">Branco</label></span><span class="option"><input type="radio" name="molho" id="rose" value="Rosê"><label for="rose">Rosê</label></span><span class="option"><input type="radio" name="molho" id="tomate" value="Tomate"><label for="tomate">Tomate</label></span></div></div><div class="choice"><h5>Ingredientes <span>• até 5</span></h5><div class="options" id="ingredients"></div></div><div class="choice"><h5>Finalização <span>• até 1</span></h5><div class="options"><span class="option"><input type="radio" name="final" id="finalQueijo" value="Queijo"><label for="finalQueijo">Queijo</label></span><span class="option"><input type="radio" name="final" id="oregano" value="Orégano"><label for="oregano">Orégano</label></span><span class="option"><input type="radio" name="final" id="biquinho" value="Pimenta biquinho"><label for="biquinho">Pimenta biquinho</label></span><span class="option"><input type="radio" name="final" id="semFinal" value="Sem finalização" checked><label for="semFinal">Sem finalização</label></span></div></div><div class="choice"><h5>Adicionais <span>• escolha quantos quiser</span></h5><div class="options"><span class="option"><input type="checkbox" name="extra" id="ovo" value="Ovo de codorna (+R$ 1,00)" data-price="1"><label for="ovo">Ovo de codorna +R$ 1</label><input type="number" min="0" value="0" id="quantity-ovo" aria-label="Quantidade de ovos de codorna" style="width:64px"></span><span class="option"><input type="checkbox" name="extra" id="salsicha" value="Salsicha (+R$ 2,00)" data-price="2"><label for="salsicha">Salsicha +R$ 2</label><input type="number" min="0" value="0" id="quantity-salsicha" aria-label="Quantidade de salsicha" style="width:64px"></span><span class="option"><input type="checkbox" name="extra" id="calabresa" value="Calabresa (+R$ 3,00)" data-price="3"><label for="calabresa">Calabresa +R$ 3</label><input type="number" min="0" value="0" id="quantity-calabresa" aria-label="Quantidade de calabresa" style="width:64px"></span></div></div><button class="primary">Adicionar ao pedido</button></form></div></div>
   <div id="cartModal" class="overlay"><div class="modal"><div class="modal-head"><div><h3>Seu pedido</h3><span>Revise antes de enviar</span></div><button class="close" onclick="closeModal('cartModal')">×</button></div><div id="cartLines"></div><div id="checkout" hidden><div class="checkout-total"><span>Total</span><span id="total"></span></div><div class="form-row"><label class="field">Seu nome<input id="customerName" placeholder="Como podemos te chamar?"></label><label class="field">Pagamento<select id="payment"><option>Pix</option><option>Dinheiro</option><option>Cartão</option></select></label></div><div class="choice"><h5>Como você quer receber? <span>• escolha 1</span></h5><div class="options"><span class="option"><input type="radio" name="delivery" id="retirada" value="Retirada" checked><label for="retirada">Retirada</label></span><span class="option"><input type="radio" name="delivery" id="entrega" value="Entrega"><label for="entrega">Delivery</label></span></div></div><label class="field">Endereço / ponto de referência <textarea id="address" placeholder="Preencha se for delivery"></textarea></label><p style="font-size:11px;color:#795b49;line-height:1.4">Delivery próprio: Planalto Ayrton Senna, Renascer, Cidade Nova e Arvoredo. Para outros bairros, consulte o envio via Uber Flash.</p><button class="primary" onclick="sendWhatsApp()">Enviar pedido pelo WhatsApp</button></div></div></div>
   <script>
-    const catalog={p500:[['Carne do Sol',18],['Carne Moída',17],['Frango',16],['Calabresa',16],['Frango + Calabresa',18],['Frango + Bacon',18],['Calabresa + Bacon',18],['Carne do Sol + Bacon',20]],p750:[['Carne do Sol',28],['Camarão',35],['Carne Moída',25],['Frango',25],['Frango + Bacon',27],['Carne do Sol + Bacon',30],['Calabresa',25],['Frango + Calabresa',27],['Calabresa + Bacon',27],['Carne Moída + Calabresa',27]],extras:[['Arroz de camarão',20,'Novidade da casa'],['Arroz de carne de sol',20,'Novidade da casa'],['Canudão de vatapá',5,'Unidade'],['Mini salgados — 10 unidades',8,'5 coxinhas + 5 bolinhas de queijo'],['Mini salgados — 20 unidades',15,'10 coxinhas + 10 bolinhas de queijo'],['Porção de batata frita',10,'Porção']],dogs:[['Hot dog carne moída',7],['Hot dog de calabresa',10],['Hot dog de bacon',10]],drinks:[['Coca-Cola Original',6],['Coca-Cola Zero',6],['Sprite',6],['São Geraldo',6],['Fanta Laranja',6],['Fanta Uva',6]]};let cart=[],activePasta=null;const money=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});function card(item,isPasta=false){let[n,p,d='']=item;return `<article class="card"><h4>${n}${isPasta?' '+(item[3]||''):''}</h4><p>${d|| (isPasta?'Massa, molho e temperos da sua preferência.':'')}</p><div class="card-bottom"><span class="price">${money(p)}</span><button class="add" onclick='${isPasta?`openPasta(${JSON.stringify({name:n,price:p,size:item[3]}).replace(/"/g,'&quot;')})`:`addSimple(${JSON.stringify(n)},${p})`}'>${isPasta?'Montar':'Adicionar'}</button></div></article>`}function render(){document.querySelector('#pasta500').innerHTML=catalog.p500.map(x=>card([...x,'','500 ml'],true)).join('');document.querySelector('#pasta750').innerHTML=catalog.p750.map(x=>card([...x,'','750 ml'],true)).join('');for(const [id,key] of [['extras','extras'],['dogs','dogs'],['drinks','drinks']])document.querySelector('#'+id).innerHTML=catalog[key].map(x=>card(x)).join('')}function openPasta(item){activePasta=item;document.querySelector('#pastaTitle').textContent=`${item.name} ${item.size}`;document.querySelector('#pastaPrice').textContent=money(item.price);document.querySelector('#pastaForm').reset();document.querySelector('#pastaModal').classList.add('show')}function closeModal(id){document.querySelector('#'+id).classList.remove('show')}function addSimple(name,price){cart.push({name,price,details:''});updateCart()}function updateCart(){document.querySelector('#count').textContent=cart.length}const ing=['Salsicha','Queijo','Pimenta do reino','Cheiro verde','Pimenta calabresa','Milho','Ervilha','Uva passa'];document.querySelector('#ingredients').innerHTML=ing.map((x,i)=>`<span class="option"><input type="checkbox" name="ingredient" id="ing${i}" value="${x}"><label for="ing${i}">${x}</label></span>`).join('');document.querySelector('#ingredients').addEventListener('change',e=>{if(document.querySelectorAll('input[name=ingredient]:checked').length>5){e.target.checked=false;alert('Você pode escolher até 5 ingredientes.')}});document.querySelector('#pastaForm').addEventListener('submit',e=>{e.preventDefault();let f=new FormData(e.target),ingredients=[...document.querySelectorAll('input[name=ingredient]:checked')].map(x=>x.value),extras=[...document.querySelectorAll('input[name=extra]:checked')],extraTotal=extras.reduce((s,x)=>s+Number(x.dataset.price),0),detail=`Massa: ${f.get('massa')} | Molho: ${f.get('molho')} | Ingredientes: ${ingredients.length?ingredients.join(', '):'nenhum'} | Finalização: ${f.get('final')}${extras.length?' | Adicionais: '+extras.map(x=>x.value).join(', '):''}`;cart.push({name:`${activePasta.name} ${activePasta.size}`,price:activePasta.price+extraTotal,details:detail});updateCart();closeModal('pastaModal')});function openCart(){let lines=document.querySelector('#cartLines'),checkout=document.querySelector('#checkout');if(!cart.length){lines.innerHTML='<p class="empty">Seu pedido ainda está vazio.</p>';checkout.hidden=true}else{lines.innerHTML=cart.map((x,i)=>`<div class="cart-line"><strong>${x.name}</strong><small>${x.details}</small><div class="line-foot"><span class="price">${money(x.price)}</span><button class="remove" onclick="removeItem(${i})">Remover</button></div></div>`).join('');checkout.hidden=false;document.querySelector('#total').textContent=money(cart.reduce((s,x)=>s+x.price,0))}document.querySelector('#cartModal').classList.add('show')}function removeItem(i){cart.splice(i,1);updateCart();openCart()}function sendWhatsApp(){let name=document.querySelector('#customerName').value.trim(),method=document.querySelector('input[name=delivery]:checked').value,address=document.querySelector('#address').value.trim();if(!name){alert('Informe seu nome para enviar o pedido.');return}if(method==='Entrega'&&!address){alert('Informe o endereço para delivery.');return}let total=cart.reduce((s,x)=>s+x.price,0),msg=`*NOVO PEDIDO — MACARRÃO DELLAS*%0A%0A*Cliente:* ${name}%0A*Recebimento:* ${method}%0A${address?`*Endereço:* ${address}%0A`:''}*Pagamento:* ${document.querySelector('#payment').value}%0A%0A*ITENS:*%0A${cart.map((x,i)=>`${i+1}. ${x.name} — ${money(x.price)}${x.details?`%0A   ${x.details}`:''}`).join('%0A')}%0A%0A*TOTAL: ${money(total)}*%0A%0A${method==='Entrega'?'Taxa de entrega a confirmar.':''}`;window.open('https://wa.me/5585991633925?text='+encodeURIComponent(decodeURIComponent(msg)),'_blank')}render();
+    const managedProducts=[];const catalog={p500:[['Carne do Sol',18],['Carne Moída',17],['Frango',16],['Calabresa',16],['Frango + Calabresa',18],['Frango + Bacon',18],['Calabresa + Bacon',18],['Carne do Sol + Bacon',20]],p750:[['Carne do Sol',28],['Camarão',35],['Carne Moída',25],['Frango',25],['Frango + Bacon',27],['Carne do Sol + Bacon',30],['Calabresa',25],['Frango + Calabresa',27],['Calabresa + Bacon',27],['Carne Moída + Calabresa',27]],extras:[['Arroz de camarão',20,'Novidade da casa'],['Arroz de carne de sol',20,'Novidade da casa'],['Canudão de vatapá',5,'Unidade'],['Mini salgados — 10 unidades',8,'5 coxinhas + 5 bolinhas de queijo'],['Mini salgados — 20 unidades',15,'10 coxinhas + 10 bolinhas de queijo'],['Porção de batata frita',10,'Porção']],dogs:[['Hot dog carne moída',7],['Hot dog de calabresa',10],['Hot dog de bacon',10]],drinks:[['Coca-Cola Original',6],['Coca-Cola Zero',6],['Sprite',6],['São Geraldo',6],['Fanta Laranja',6],['Fanta Uva',6]]};let cart=[],activePasta=null;const money=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});function card(item,isPasta=false){let[n,p,d='']=item;return `<article class="card"><h4>${n}${isPasta?' '+(item[3]||''):''}</h4><p>${d|| (isPasta?'Massa, molho e temperos da sua preferência.':'')}</p><div class="card-bottom"><span class="price">${money(p)}</span><button class="add" onclick='${isPasta?`openPasta(${JSON.stringify({name:n,price:p,size:item[3]}).replace(/"/g,'&quot;')})`:`addSimple(${JSON.stringify(n)},${p})`}'>${isPasta?'Montar':'Adicionar'}</button></div></article>`}function render(){document.querySelector('#pasta500').innerHTML=catalog.p500.map(x=>card([...x,'','500 ml'],true)).join('');document.querySelector('#pasta750').innerHTML=catalog.p750.map(x=>card([...x,'','750 ml'],true)).join('');for(const [id,key] of [['extras','extras'],['dogs','dogs'],['drinks','drinks']])document.querySelector('#'+id).innerHTML=catalog[key].map(x=>card(x)).join('')}function openPasta(item){activePasta={...item,productId:managedProducts.find(product=>product.category===(item.size==='500 ml'?'p500':'p750')&&product.name===item.name)?.id,category:item.size==='500 ml'?'p500':'p750'};document.querySelector('#pastaTitle').textContent=`${item.name} ${item.size}`;document.querySelector('#pastaPrice').textContent=money(item.price);document.querySelector('#pastaForm').reset();document.querySelector('#pastaModal').classList.add('show')}function closeModal(id){document.querySelector('#'+id).classList.remove('show')}function addSimple(name,price){const product=managedProducts.find(item=>item.name===name);cart.push({name,price,details:'',productId:product?.id,category:product?.category});updateCart()}function updateCart(){document.querySelector('#count').textContent=cart.length}const ing=['Salsicha','Queijo','Pimenta do reino','Cheiro verde','Pimenta calabresa','Milho','Ervilha','Uva passa'];document.querySelector('#ingredients').innerHTML=ing.map((x,i)=>`<span class="option"><input type="checkbox" name="ingredient" id="ing${i}" value="${x}"><label for="ing${i}">${x}</label></span>`).join('');document.querySelector('#ingredients').addEventListener('change',e=>{if(document.querySelectorAll('input[name=ingredient]:checked').length>5){e.target.checked=false;alert('Você pode escolher até 5 ingredientes.')}});document.querySelector('#pastaForm').addEventListener('submit',e=>{e.preventDefault();let f=new FormData(e.target),ingredients=[...document.querySelectorAll('input[name=ingredient]:checked')].map(x=>x.value),extras=[...document.querySelectorAll('input[name=extra]:checked')],extraTotal=extras.reduce((s,x)=>s+Number(x.dataset.price)*Math.max(1,Number(document.getElementById('quantity-'+x.id)?.value)||1),0),detail=`Massa: ${f.get('massa')} | Molho: ${f.get('molho')} | Ingredientes: ${ingredients.length?ingredients.join(', '):'nenhum'} | Finalização: ${f.get('final')}${extras.length?' | Adicionais: '+extras.map(x=>x.value.replace(/ \(+R\$.*$/,'')+' ('+(Number(document.getElementById('quantity-'+x.id)?.value)||0)+'x)').join(', '):''}`;cart.push({name:`${activePasta.name} ${activePasta.size}`,price:activePasta.price+extraTotal,details:detail,productId:activePasta.productId,category:activePasta.category});updateCart();closeModal('pastaModal')});function openCart(){let lines=document.querySelector('#cartLines'),checkout=document.querySelector('#checkout');if(!cart.length){lines.innerHTML='<p class="empty">Seu pedido ainda está vazio.</p>';checkout.hidden=true}else{lines.innerHTML=cart.map((x,i)=>`<div class="cart-line"><strong>${x.name}</strong><small>${x.details}</small><div class="line-foot"><span class="price">${money(x.price)}</span><button class="remove" onclick="removeItem(${i})">Remover</button></div></div>`).join('');checkout.hidden=false;document.querySelector('#total').textContent=money(cart.reduce((s,x)=>s+x.price,0))}document.querySelector('#cartModal').classList.add('show')}function removeItem(i){cart.splice(i,1);updateCart();openCart()}function sendWhatsApp(){let name=document.querySelector('#customerName').value.trim(),method=document.querySelector('input[name=delivery]:checked').value,address=document.querySelector('#address').value.trim();if(!name){alert('Informe seu nome para enviar o pedido.');return}if(method==='Entrega'&&!address){alert('Informe o endereço para delivery.');return}let total=cart.reduce((s,x)=>s+x.price,0),msg=`*NOVO PEDIDO — MACARRÃO DELLAS*%0A%0A*Cliente:* ${name}%0A*Recebimento:* ${method}%0A${address?`*Endereço:* ${address}%0A`:''}*Pagamento:* ${document.querySelector('#payment').value}%0A%0A*ITENS:*%0A${cart.map((x,i)=>`${i+1}. ${x.name} — ${money(x.price)}${x.details?`%0A   ${x.details}`:''}`).join('%0A')}%0A%0A*TOTAL: ${money(total)}*%0A%0A${method==='Entrega'?'Taxa de entrega a confirmar.':''}`;window.open('https://wa.me/5585991633925?text='+encodeURIComponent(decodeURIComponent(msg)),'_blank')}render();
   </script>
   <script>
     /* Informações de entrega adicionais */
@@ -282,43 +282,89 @@
     })();
   </script>
   <script>
-    /* Indicador aberto/fechado calculado pelos horários da gestão. */
+    /* O servidor é a fonte de verdade para o horário e os controles de pedidos. */
     (function liveOpenStatus(){
-      const badge=document.querySelector('#openStatus'),label=badge.querySelector('span'),dayNames=['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
-      const toMinutes=value=>{const [hour,minute]=String(value||'').split(':').map(Number);return Number.isFinite(hour)&&Number.isFinite(minute)?hour*60+minute:null};
-      function update(){
-        let management;try{management=JSON.parse(localStorage.getItem('dellas-management-v3')||'null')}catch{management=null}
-        const now=new Date(),minutes=now.getHours()*60+now.getMinutes(),hours=management?.hours||[],today=hours.find(item=>item.day===dayNames[now.getDay()]),previous=hours.find(item=>item.day===dayNames[(now.getDay()+6)%7]);
-        const inToday=(()=>{if(!today?.open)return false;const from=toMinutes(today.from),to=toMinutes(today.to);if(from===null||to===null)return false;return to>from?minutes>=from&&minutes<to:minutes>=from})();
-        const fromPrevious=(()=>{if(!previous?.open)return false;const from=toMinutes(previous.from),to=toMinutes(previous.to);return from!==null&&to!==null&&to<=from&&minutes<to})();
-        const isOpen=inToday||fromPrevious;badge.classList.toggle('is-open',isOpen);label.textContent=isOpen?'Aberto agora':'Fechado agora';badge.title=isOpen?'Estamos atendendo neste momento.':'Estamos fora do horário de atendimento.';
-      }
-      update();setInterval(update,30000);window.addEventListener('storage',update);
+      const badge=document.querySelector('#openStatus');
+      const label=badge?.querySelector('span');
+      if(!badge||!label)return;
+      const message=document.createElement('p');
+      message.id='businessStatusMessage';
+      message.setAttribute('aria-live','polite');
+      document.querySelector('.service-brief')?.append(message);
+      let currentStatus=null;
+      window.businessStatusReady=async function refreshBusinessStatus(){
+        try{
+          const response=await fetch('/api/business-status',{cache:'no-store'});
+          if(!response.ok)throw new Error('Não foi possível consultar o funcionamento.');
+          currentStatus=await response.json();
+          badge.classList.toggle('is-open',currentStatus.isOpen===true);
+          label.textContent=currentStatus.label;
+          badge.title=currentStatus.message;
+          message.textContent=currentStatus.message;
+          const hoursInfo=document.querySelector('#hoursClientInfo');
+          if(hoursInfo){
+            hoursInfo.replaceChildren();
+            const heading=document.createElement('b');
+            heading.textContent='Horários de funcionamento';
+            hoursInfo.append(heading);
+            const openHours=(currentStatus.hours||[]).filter(item=>item.open);
+            if(openHours.length){
+              openHours.forEach(item=>{
+                const line=document.createElement('span');
+                line.textContent=`${item.day}: ${item.from} às ${item.to}`;
+                hoursInfo.append(document.createElement('br'),line);
+              });
+            }else{
+              const line=document.createElement('span');
+              line.textContent='Horários ainda não cadastrados.';
+              hoursInfo.append(document.createElement('br'),line);
+            }
+          }
+        }catch{
+          currentStatus=null;
+          badge.classList.remove('is-open');
+          label.textContent='VERIFICANDO FUNCIONAMENTO';
+          badge.title='Não foi possível confirmar se o delivery está aberto.';
+          message.textContent='Não foi possível confirmar o funcionamento. Tente novamente em instantes.';
+        }
+        document.querySelectorAll('.add').forEach(button=>{
+          button.disabled=currentStatus?.isOpen!==true;
+          button.setAttribute('aria-disabled',String(button.disabled));
+        });
+        const submit=document.querySelector('#pastaForm button[type="submit"]');
+        if(submit)submit.disabled=currentStatus?.isOpen!==true;
+        const checkout=document.querySelector('#checkout .primary');
+        if(checkout&&checkout.dataset.orderRegistered!=='true')checkout.disabled=currentStatus?.isOpen!==true;
+        return currentStatus;
+      };
+      document.addEventListener('click',event=>{
+        const addButton=event.target.closest('.add');
+        if(!addButton||currentStatus?.isOpen===true)return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        alert(currentStatus?.message||'Não foi possível confirmar se o delivery está aberto.');
+      },true);
+      window.businessStatusReady();
+      setInterval(window.businessStatusReady,30000);
+      window.addEventListener('focus',window.businessStatusReady);
     })();
+  </script>
+  <script>
+    /* Sincroniza o cat?logo do servidor antes de validar o checkout. */
+    window.managedCatalogReady=(async()=>{try{const response=await fetch('/api/catalog',{cache:'no-store'});if(!response.ok)throw new Error();return await response.json()}catch{return null}})();
   </script>
   <script>
     /* Contato do cliente para atualização do status do pedido. */
     const customerNameField=document.querySelector('#customerName').closest('.field');
     if(!document.querySelector('#customerPhone'))customerNameField.insertAdjacentHTML('afterend','<label class="field">Seu WhatsApp<input id="customerPhone" inputmode="tel" placeholder="Ex.: 85 99999-9999"></label>');
-    const sendOrderWithPhone=sendWhatsApp;
-    sendWhatsApp=function(){
-      const phone=document.querySelector('#customerPhone').value.trim(),method=document.querySelector('input[name="delivery"]:checked').value,phoneDigits=phone.replace(/\D/g,'');
-      if(method==='Entrega'&&!(phoneDigits.length===10||phoneDigits.length===11||phoneDigits.length===12||phoneDigits.length===13)){alert('Informe um WhatsApp válido, com DDD. Ex.: 85 99999-9999.');return}
-      const before=JSON.parse(localStorage.getItem('dellas-management-v3')||'null')?.orders?.length||0;
-      sendOrderWithPhone();
-      const management=JSON.parse(localStorage.getItem('dellas-management-v3')||'null');
-      if(management&&management.orders&&management.orders.length>before){management.orders[management.orders.length-1].customerPhone=phone;localStorage.setItem('dellas-management-v3',JSON.stringify(management));}
-    };
   </script>
   <script>
-    /* WhatsApp é necessário apenas para pedidos por delivery. */
+    /* O telefone é necessário para acompanhar qualquer pedido. */
     const phoneLabel=document.querySelector('#customerPhone').closest('.field');
     function toggleCustomerPhone(){
-      const delivery=document.querySelector('input[name="delivery"]:checked')?.value==='Entrega';
-      phoneLabel.style.display=delivery?'grid':'none';
-      document.querySelector('#customerPhone').required=delivery;
+      phoneLabel.style.display='grid';
+      document.querySelector('#customerPhone').required=true;
     }
-    document.querySelectorAll('input[name="delivery"]').forEach(input=>input.addEventListener('change',toggleCustomerPhone));
     toggleCustomerPhone();
   </script>
   <style>
@@ -344,6 +390,9 @@
     /* Bebidas disponíveis diretamente ao montar uma macarronada. */
     const pastaSubmitButton=document.querySelector('#pastaForm .primary');
     pastaSubmitButton.insertAdjacentHTML('beforebegin','<div class="choice" id="pastaDrinks"><h5>Quer adicionar uma bebida? <span>• opcional</span></h5><div class="options"><span class="option"><input type="checkbox" name="pasta-drink" id="drinkCoca" value="Coca-Cola Original" data-price="6"><label for="drinkCoca">Coca-Cola Original +R$ 6</label></span><span class="option"><input type="checkbox" name="pasta-drink" id="drinkCocaZero" value="Coca-Cola Zero" data-price="6"><label for="drinkCocaZero">Coca-Cola Zero +R$ 6</label></span><span class="option"><input type="checkbox" name="pasta-drink" id="drinkSprite" value="Sprite" data-price="6"><label for="drinkSprite">Sprite +R$ 6</label></span><span class="option"><input type="checkbox" name="pasta-drink" id="drinkSaoGeraldo" value="São Geraldo" data-price="6"><label for="drinkSaoGeraldo">São Geraldo +R$ 6</label></span><span class="option"><input type="checkbox" name="pasta-drink" id="drinkFantaLaranja" value="Fanta Laranja" data-price="6"><label for="drinkFantaLaranja">Fanta Laranja +R$ 6</label></span><span class="option"><input type="checkbox" name="pasta-drink" id="drinkFantaUva" value="Fanta Uva" data-price="6"><label for="drinkFantaUva">Fanta Uva +R$ 6</label></span></div></div>');
+    const pastaDrinkAvailability=()=>({...{'Coca-Cola Original':true,'Coca-Cola Zero':true,Sprite:true,'São Geraldo':true,'Fanta Laranja':true,'Fanta Uva':true},...(JSON.parse(localStorage.getItem('dellas-management-v3')||'{}').pastaDrinkAvailability||{})});
+    function renderPastaDrinkAvailability(){const status=pastaDrinkAvailability();document.querySelectorAll('input[name="pasta-drink"]').forEach(input=>{const active=status[input.value]!==false;input.closest('.option').style.display=active?'':'none';input.disabled=!active;if(!active)input.checked=false})}
+    renderPastaDrinkAvailability();window.managedCatalogReady?.then(result=>{if(result?.catalog?.pastaDrinkAvailability){const management=JSON.parse(localStorage.getItem('dellas-management-v3')||'{}');management.pastaDrinkAvailability=result.catalog.pastaDrinkAvailability;localStorage.setItem('dellas-management-v3',JSON.stringify(management));renderPastaDrinkAvailability()}});
     document.querySelector('#pastaForm').addEventListener('submit',()=>{
       document.querySelectorAll('input[name="pasta-drink"]:checked').forEach(drink=>cart.push({name:drink.value+' 350 ml',price:Number(drink.dataset.price),details:'Bebida adicionada junto à macarronada'}));
       updateCart();
@@ -508,6 +557,7 @@
       const sendOrderToWhatsApp=sendWhatsApp;
       sendWhatsApp=async function(){
         if(checkoutButton?.disabled)return;
+        await window.managedCatalogReady;
         let management;
         try{management=JSON.parse(localStorage.getItem('dellas-management-v3')||'null')}catch{management=null}
         if(!management)management={};
@@ -521,7 +571,8 @@
         if(!order||management.orders.length<=before)return;
         if(checkoutButton){checkoutButton.disabled=true;checkoutButton.textContent='Criando acompanhamento…'}
         try{
-          const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+          const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...order,items:order.items.map(item=>{const product=(published?.products||[]).find(entry=>entry.id===item.productId);return {...item,...(product?{productId:product.id,category:product.category}:{})}})})});
+          if(response.status===409){const failure=await response.json().catch(()=>({}));if(checkoutButton){checkoutButton.disabled=false;checkoutButton.textContent='Finalizar e enviar pelo WhatsApp'}alert(failure.error||'A loja está fechada ou há um item indisponível.');return}
           if(!response.ok)throw new Error('Falha ao registrar');
           const result=await response.json();
           order.id=result.id;order.orderCode=result.orderCode;order.trackingToken=result.trackingToken;order.status=result.status;localStorage.setItem('dellas-management-v3',JSON.stringify(management));
@@ -538,7 +589,7 @@
     (async function loadManagedCatalog(){
       try{
         const response=await fetch('/api/catalog',{cache:'no-store'}),data=await response.json(),managed=data.catalog;if(!managed)return;localStorage.setItem('dellas-management-v3',JSON.stringify({...managed,orders:JSON.parse(localStorage.getItem('dellas-management-v3')||'{}').orders||[]}));syncManagedComponents(managed.components||{},managed.componentAvailability||{});
-        const targets={p500:'pasta500',p750:'pasta750',turbinado:'turbinados',extras:'extras',dogs:'dogs',drinks:'drinks'},categories=managed.categories||[],products=managed.products||[];
+        const targets={p500:'pasta500',p750:'pasta750',turbinado:'turbinados',extras:'extras',dogs:'dogs',drinks:'drinks'},categories=managed.categories||[],products=managed.products||[];managedProducts.splice(0,managedProducts.length,...products);
         categories.filter(category=>category.id!=='burger-breads').forEach(category=>{
           if(category.id==='combos'){const section=document.querySelector('#combosSection');if(!section)return;section.hidden=category.deleted||category.active===false;section.querySelector('.category-title h3').textContent=category.name;section.querySelector('.category-title small').textContent=category.subtitle||'';const comboItems=products.filter(product=>product.category==='combos');const aliases={'combo-economic':'Combo Econômico','combo-premium':'Combo Premium','combo-dellas':'Combo Dellas','combo-family':'Combo Família','combo-bauru':'Combo Bauru','combo-xburguer':'Combo X-Burguer','combo-xcalabresa':'Combo X-Calabresa','combo-hotdog':'Combo 2 Hot Dogs'};comboItems.forEach(product=>{const expected=aliases[product.id]||product.name;const item=[...section.querySelectorAll('.combo-card')].find(card=>card.querySelector('h4')?.textContent.trim()===expected||card.dataset.managedId===product.id);if(!item)return;item.dataset.managedId=product.id;item.hidden=product.deleted||product.active===false;item.querySelector('h4').textContent=product.name;item.querySelector('p').textContent=product.description||'';item.querySelector('.price').textContent=money(Number(product.price));const button=item.querySelector('button');if(button){button.dataset.name=product.name;button.dataset.price=String(product.price)}});return}
           const targetId=targets[category.id];
@@ -546,6 +597,433 @@
           let section=document.querySelector(`[data-category-id="${category.id}"]`);if(!section){section=document.createElement('section');section.className='category';section.dataset.categoryId=category.id;section.innerHTML='<div class="category-title"><h3></h3><small></small></div><div class="grid"></div>';document.querySelector('#drinks')?.closest('.category')?.before(section)}section.hidden=category.deleted||category.active===false;section.querySelector('h3').textContent=category.name;section.querySelector('small').textContent=category.subtitle||'';const grid=section.querySelector('.grid');grid.innerHTML='';products.filter(product=>product.category===category.id&&product.active&&!product.deleted).forEach(product=>grid.insertAdjacentHTML('beforeend',card([product.name,Number(product.price),product.description||''])));
         });
       }catch{}
+    })();
+  </script>
+  <script>
+    /* Registra o pedido antes de oferecer a abertura do WhatsApp. */
+    (function reliableOrderSubmission(){
+      const phoneInput=document.querySelector('#customerPhone');
+      const phoneLabel=phoneInput?.closest('.field');
+      if(phoneInput){
+        phoneInput.required=true;
+        phoneInput.autocomplete='tel';
+        phoneInput.inputMode='tel';
+        if(phoneLabel)phoneLabel.style.display='grid';
+        phoneInput.addEventListener('input',()=>{
+          const digits=phoneInput.value.replace(/\D/g,'').replace(/^55(?=\d{10,11})/,'').slice(0,11);
+          const ddd=digits.slice(0,2);
+          const subscriber=digits.slice(2);
+          phoneInput.value=digits.length>2
+            ?`(${ddd}) ${subscriber.slice(0,digits.length===11?5:4)}${subscriber.length>(digits.length===11?5:4)?`-${subscriber.slice(digits.length===11?5:4)}`:''}`
+            :digits;
+        });
+      }
+      const addressLabel=document.querySelector('#address')?.closest('.field');
+      if(addressLabel&&!document.querySelector('#neighborhood')){
+        const row=document.createElement('div');
+        row.className='form-row';
+        [['neighborhood','Bairro','Seu bairro'],['addressNumber','Número','Número do endereço'],['complement','Complemento','Apartamento, bloco ou casa']].forEach(([id,labelText,placeholder])=>{
+            const label=document.createElement('label');
+            label.className='field';
+            label.textContent=labelText;
+            const input=document.createElement('input');
+            input.id=id;
+            input.placeholder=placeholder;
+            label.append(input);
+            row.append(label);
+        });
+        addressLabel.insertAdjacentElement('afterend',row);
+      }
+      const pastaForm=document.querySelector('#pastaForm');
+      const pastaPrice=document.querySelector('#pastaPrice');
+      function ensureQuantityControl(option,inputName){
+        const input=option.querySelector(`input[name="${inputName}"]`);
+        if(!input)return null;
+        const id=`quantity-${input.id}`;
+        let quantity=document.getElementById(id);
+        if(!quantity){
+            quantity=document.createElement('input');
+            quantity.type='number';
+            quantity.id=id;
+            quantity.min='0';
+            quantity.value='0';
+            quantity.max=input.dataset.maxQuantity||'99';
+            quantity.setAttribute('aria-label',`Quantidade de ${input.value}`);
+            quantity.style.width='64px';
+            const label=option.querySelector(`label[for="${input.id}"]`);
+            if(label)label.insertAdjacentElement('afterend',quantity);
+            else input.insertAdjacentElement('afterend',quantity);
+        }
+        if(!quantity.dataset.quantityBound){
+            quantity.dataset.quantityBound='true';
+            quantity.addEventListener('input',()=>{
+              const configuredMax=Number(quantity.max);
+              const max=Number.isFinite(configuredMax)?configuredMax:99;
+              quantity.value=String(Math.min(max,Math.max(0,Number(quantity.value)||0)));
+              input.checked=Number(quantity.value)>0;
+              updatePastaPrice();
+            });
+            input.addEventListener('change',()=>{
+              if(input.checked&&Number(quantity.value)===0)quantity.value='1';
+              if(!input.checked)quantity.value='0';
+              updatePastaPrice();
+            });
+            const controls=document.createElement('span');
+            controls.className='quantity-control';
+            controls.style.cssText='display:inline-flex;align-items:center;gap:4px';
+            const adjust=(delta)=>{
+              const configuredMax=Number(quantity.max);
+              const max=Number.isFinite(configuredMax)?configuredMax:99;
+              quantity.value=String(Math.min(max,Math.max(0,(Number(quantity.value)||0)+delta)));
+              quantity.dispatchEvent(new Event('input',{bubbles:true}));
+            };
+            const minus=document.createElement('button');
+            minus.type='button';
+            minus.textContent='−';
+            minus.setAttribute('aria-label',`Diminuir ${input.value}`);
+            minus.addEventListener('click',()=>adjust(-1));
+            const plus=document.createElement('button');
+            plus.type='button';
+            plus.textContent='+';
+            plus.setAttribute('aria-label',`Aumentar ${input.value}`);
+            plus.addEventListener('click',()=>adjust(1));
+            quantity.replaceWith(controls);
+            controls.append(minus,quantity,plus);
+        }
+        return quantity;
+      }
+      function updatePastaPrice(){
+        if(!pastaPrice||!activePasta)return;
+        const extras=[...document.querySelectorAll('input[name="extra"]:checked')].reduce((sum,input)=>{
+            const quantity=Number(document.getElementById(`quantity-${input.id}`)?.value)||0;
+            return sum+Number(input.dataset.price||0)*quantity;
+        },0);
+        const drinks=[...document.querySelectorAll('input[name="pasta-drink"]:checked')].reduce((sum,input)=>{
+            const quantity=Number(document.getElementById(`quantity-${input.id}`)?.value)||0;
+            return sum+Number(input.dataset.price||0)*quantity;
+        },0);
+        pastaPrice.textContent=money(Number(activePasta.price)+extras+drinks);
+      }
+      let editingIndex=null;
+      let currentPastaGroupId=null;
+      let pendingCustomization=null;
+      let pendingDrinkItems=[];
+      let pastaSubmitting=false;
+      let eggExtraPrice=1;
+      let eggExtraQuantityLimit=99;
+      const updateConfiguredPasta=openPasta;
+      openPasta=function(item){
+        updateConfiguredPasta(item);
+        if(editingIndex===null||!currentPastaGroupId)currentPastaGroupId=crypto.randomUUID();
+        document.querySelectorAll('input[name="extra"]').forEach(input=>{
+            const option=input.closest('.option');
+            const quantity=ensureQuantityControl(option,'extra');
+            if(quantity){
+                const isEgg=/ovo de codorna/i.test(input.value);
+                const configuredLimit=Number(managedProducts.find(product=>product.id===activePasta?.productId)?.extraQuantityLimit);
+                quantity.max=String(isEgg?eggExtraQuantityLimit:Number.isInteger(configuredLimit)&&configuredLimit>=0?configuredLimit:99);
+                if(isEgg){
+                  const name=input.value.replace(/\s*\(\+R\$.*$/i,'').trim();
+                  input.value=`${name} (+R$ ${eggExtraPrice.toFixed(2).replace('.',',')})`;
+                  input.dataset.price=String(eggExtraPrice);
+                  const label=option.querySelector(`label[for="${input.id}"]`);
+                  if(label)label.textContent=`${name} +R$ ${eggExtraPrice.toFixed(2).replace('.',',')}`;
+                }
+                quantity.value='0';
+                input.checked=false;
+            }
+        });
+        document.querySelectorAll('input[name="pasta-drink"]').forEach(input=>{
+            const quantity=ensureQuantityControl(input.closest('.option'),'pasta-drink');
+            if(quantity){quantity.value='0';input.checked=false}
+        });
+        updatePastaPrice();
+      };
+      document.querySelectorAll('input[name="extra"]').forEach(input=>ensureQuantityControl(input.closest('.option'),'extra'));
+      document.querySelectorAll('input[name="pasta-drink"]').forEach(input=>ensureQuantityControl(input.closest('.option'),'pasta-drink'));
+      pastaForm?.addEventListener('submit',()=>{
+        pastaSubmitting=true;
+        pendingDrinkItems=[];
+        pendingCustomization={
+          baseName:activePasta.name,
+          size:activePasta.size,
+          basePrice:Number(activePasta.price),
+          massa:pastaForm.querySelector('input[name="massa"]:checked')?.value||'',
+          molho:pastaForm.querySelector('input[name="molho"]:checked')?.value||'',
+          ingredients:[...pastaForm.querySelectorAll('input[name="ingredient"]:checked')].map(input=>input.value),
+          final:pastaForm.querySelector('input[name="final"]:checked')?.value||'',
+          extras:[...pastaForm.querySelectorAll('input[name="extra"]:checked')].map(input=>({value:input.value.replace(/\s*\(\+R\$.*$/i,'').trim(),quantity:Number(document.getElementById(`quantity-${input.id}`)?.value)||0})),
+          drinks:[...pastaForm.querySelectorAll('input[name="pasta-drink"]:checked')].map(input=>({value:input.value,quantity:Number(document.getElementById(`quantity-${input.id}`)?.value)||0})),
+        };
+        if(editingIndex!==null){
+          const previous=cart[editingIndex];
+          if(previous?.pastaGroupId)cart=cart.filter(item=>item.pastaGroupId!==previous.pastaGroupId);
+          else if(previous)cart.splice(editingIndex,1);
+        }
+        document.querySelectorAll('input[name="pasta-drink"]:checked').forEach(input=>{
+            const quantity=Number(document.getElementById(`quantity-${input.id}`)?.value)||0;
+            if(quantity>0){
+              pendingDrinkItems.push({name:`${input.value} 350 ml`,price:Number(input.dataset.price)*quantity,details:`Quantidade: ${quantity}`,quantity,productId:managedProducts.find(product=>product.name===input.value)?.id,category:'drinks',pastaGroupId:currentPastaGroupId});
+            }
+            input.checked=false;
+            const count=document.getElementById(`quantity-${input.id}`);
+            if(count)count.value='0';
+        });
+        updateCart();
+      },true);
+      pastaForm?.addEventListener('submit',()=>{
+        const pastaItem=[...cart].reverse().find(item=>item.name===`${activePasta.name} ${activePasta.size}`&&item.category===activePasta.category);
+        if(pastaItem){
+          pastaItem.pastaGroupId=currentPastaGroupId;
+          pastaItem.customization=pendingCustomization;
+        }
+        cart.push(...pendingDrinkItems);
+        editingIndex=null;
+        currentPastaGroupId=null;
+        pendingCustomization=null;
+        pendingDrinkItems=[];
+        pastaSubmitting=false;
+        updateCart();
+      });
+      const originalCloseModal=closeModal;
+      closeModal=function(id){
+        originalCloseModal(id);
+        if(id==='pastaModal'&&!pastaSubmitting){
+          editingIndex=null;
+          currentPastaGroupId=null;
+        }
+      };
+      window.managedCatalogReady?.then(({catalog:managed}={})=>{
+        if(!managed)return;
+        const configuredEggPrice=Number(managed.eggExtraPrice);
+        const configuredEggLimit=Number(managed.eggExtraQuantityLimit);
+        if(Number.isFinite(configuredEggPrice)&&configuredEggPrice>=0)eggExtraPrice=configuredEggPrice;
+        if(Number.isInteger(configuredEggLimit)&&configuredEggLimit>=0&&configuredEggLimit<=99)eggExtraQuantityLimit=configuredEggLimit;
+        document.querySelectorAll('input[name="pasta-drink"]').forEach(input=>{
+            const product=(managed.products||[]).find(item=>item.name?.toLowerCase()===input.value.toLowerCase());
+            const category=(managed.categories||[]).find(item=>item.id===product?.category);
+            if(product){
+              input.dataset.price=String(Number(product.price)||0);
+              const configuredLimit=Number(product.maxQuantity);
+              input.dataset.maxQuantity=String(Number.isInteger(configuredLimit)&&configuredLimit>=0?configuredLimit:99);
+            }
+            const available=managed.pastaDrinkAvailability?.[input.value]!==false&&product?.active!==false&&!product?.deleted&&category?.active!==false&&!category?.deleted;
+            input.disabled=!available;
+            input.closest('.option').style.display=available?'':'none';
+            const quantity=document.getElementById(`quantity-${input.id}`);
+            if(quantity)quantity.max=input.dataset.maxQuantity||'99';
+        });
+        document.querySelectorAll('input[name="extra"]').forEach(input=>{
+            if(!/ovo de codorna/i.test(input.value))return;
+            const name=input.value.replace(/\s*\(\+R\$.*$/i,'').trim();
+            input.value=`${name} (+R$ ${eggExtraPrice.toFixed(2).replace('.',',')})`;
+            input.dataset.price=String(eggExtraPrice);
+            const label=input.closest('.option').querySelector(`label[for="${input.id}"]`);
+            if(label)label.textContent=`${name} +R$ ${eggExtraPrice.toFixed(2).replace('.',',')}`;
+            const quantity=document.getElementById(`quantity-${input.id}`);
+            if(quantity)quantity.max=String(eggExtraQuantityLimit);
+        });
+        updatePastaPrice();
+      });
+      const originalOpenCart=openCart;
+      openCart=function(){
+        originalOpenCart();
+        const modal=document.querySelector('#cartModal .modal');
+        let another=modal.querySelector('#addAnotherPasta');
+        if(!another){
+            another=document.createElement('button');
+            another.id='addAnotherPasta';
+            another.type='button';
+            another.className='primary';
+            another.textContent='ADICIONAR OUTRA MACARRONADA';
+            document.querySelector('#checkout').insertAdjacentElement('beforebegin',another);
+            another.addEventListener('click',()=>{
+              closeModal('cartModal');
+              document.querySelector('#pasta500')?.scrollIntoView({behavior:'smooth',block:'start'});
+            });
+        }
+        another.hidden=!cart.some(item=>['p500','p750','turbinado'].includes(item.category));
+        modal.querySelectorAll('.cart-line').forEach((line,index)=>{
+          const item=cart[index];
+          if(!item?.customization)return;
+          const actions=line.querySelector('.line-foot');
+          if(!actions||actions.querySelector('.edit-pasta'))return;
+          const edit=document.createElement('button');
+          edit.type='button';
+          edit.className='small edit-pasta';
+          edit.textContent='Editar';
+          edit.addEventListener('click',()=>{
+            editingIndex=index;
+            currentPastaGroupId=item.pastaGroupId||crypto.randomUUID();
+            closeModal('cartModal');
+            openPasta({name:item.customization.baseName,price:item.customization.basePrice,size:item.customization.size,productId:item.productId,category:item.category});
+            const customization=item.customization;
+            const select=(name,value)=>{const input=[...pastaForm.querySelectorAll(`input[name="${name}"]`)].find(option=>option.value===value);if(input)input.checked=true};
+            select('massa',customization.massa);
+            select('molho',customization.molho);
+            select('final',customization.final);
+            customization.ingredients.forEach(value=>select('ingredient',value));
+            customization.extras.forEach(extra=>{
+              const input=[...pastaForm.querySelectorAll('input[name="extra"]')].find(option=>option.value.replace(/\s*\(\+R\$.*$/i,'').trim()===extra.value.replace(/\s*\(\+R\$.*$/i,'').trim());
+              if(input){input.checked=extra.quantity>0;const quantity=document.getElementById(`quantity-${input.id}`);if(quantity){const max=Number(quantity.max);quantity.value=String(Math.min(extra.quantity,Number.isInteger(max)&&max>=0?max:99))}}
+            });
+            customization.drinks.forEach(drink=>{
+              const input=[...pastaForm.querySelectorAll('input[name="pasta-drink"]')].find(option=>option.value===drink.value);
+              if(input){input.checked=drink.quantity>0;const quantity=document.getElementById(`quantity-${input.id}`);if(quantity){const max=Number(quantity.max);quantity.value=String(Math.min(drink.quantity,Number.isInteger(max)&&max>=0?max:99))}}
+            });
+            updatePastaPrice();
+          });
+          actions.insertBefore(edit,actions.querySelector('.remove'));
+        });
+      };
+      const originalRemoveItem=removeItem;
+      removeItem=function(index){
+        const item=cart[index];
+        if(item?.pastaGroupId){
+          cart=cart.filter(entry=>entry.pastaGroupId!==item.pastaGroupId);
+          updateCart();
+          openCart();
+          return;
+        }
+        originalRemoveItem(index);
+      };
+      const validDdds=new Set('11 12 13 14 15 16 17 18 19 21 22 24 27 28 31 32 33 34 35 37 38 41 42 43 44 45 46 47 48 49 51 53 54 55 61 62 63 64 65 66 67 68 69 71 73 74 75 77 79 81 82 83 84 85 86 87 88 89 91 92 93 94 95 96 97 98 99'.split(' '));
+      const digitsOnly=value=>String(value||'').replace(/\D/g,'');
+      const validPhone=value=>{
+        let digits=digitsOnly(value);
+        if(digits.startsWith('55')&&(digits.length===12||digits.length===13))digits=digits.slice(2);
+        if((digits.length!==10&&digits.length!==11)||!validDdds.has(digits.slice(0,2))||/^(\d)\1+$/.test(digits))return false;
+        return digits.length===11?digits[2]==='9':'2345'.includes(digits[2]);
+      };
+      const value=selector=>document.querySelector(selector)?.value?.trim()||'';
+      const formatPhone=value=>{const digits=digitsOnly(value);return digits.length===11?`(${digits.slice(0,2)}) ${digits.slice(2,7)}-${digits.slice(7)}`:`(${digits.slice(0,2)}) ${digits.slice(2,6)}-${digits.slice(6)}`};
+      const result=document.createElement('div');
+      result.id='orderFeedback';
+      result.setAttribute('aria-live','polite');
+      document.querySelector('#checkout')?.append(result);
+      let registeredOrder=null;
+      let submitInProgress=false;
+      function buildWhatsAppUrl(order){
+        const time=new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Fortaleza',dateStyle:'short',timeStyle:'short'}).format(new Date(order.date));
+        const lines=[
+          '*NOVO PEDIDO — MACARRÃO DELLAS*',
+          `*Pedido:* #${order.orderCode}`,
+          `*Data e horário:* ${time} (Fortaleza)`,
+          '',
+          '*CLIENTE*',
+          `Nome: ${order.customer}`,
+          `WhatsApp: ${formatPhone(order.customerPhone)}`,
+          `Recebimento: ${order.method}`,
+          order.address?`Endereço: ${order.address}`:'',
+          order.neighborhood?`Bairro: ${order.neighborhood}`:'',
+          order.addressNumber?`Número: ${order.addressNumber}`:'',
+          order.complement?`Complemento: ${order.complement}`:'',
+          order.cep?`CEP: ${order.cep}`:'',
+          order.reference?`Ponto de referência: ${order.reference}`:'',
+          '',
+          '*PRODUTOS*',
+          ...order.items.map((item,index)=>`${index+1}. ${item.name} — ${money(Number(item.price)||0)}${item.details?`\\n   ${item.details}`:''}`),
+          '',
+          `Pagamento: ${order.payment}`,
+          `Total: ${money(Number(order.total)||0)}`,
+          order.method==='Entrega'?'Taxa de entrega a confirmar.':'',
+        ].filter(Boolean);
+        return `https://wa.me/5585991633925?${new URLSearchParams({text:lines.join('\n')})}`;
+      }
+      function showRegisteredOrder(order,waUrl){
+        result.replaceChildren();
+        const notice=document.createElement('p');
+        notice.textContent=`Pedido #${order.orderCode} registrado. O WhatsApp ainda não confirma o envio da mensagem.`;
+        const whatsappLink=document.createElement('a');
+        whatsappLink.href=waUrl;
+        whatsappLink.target='_blank';
+        whatsappLink.rel='noopener noreferrer';
+        whatsappLink.textContent='Abrir ou tentar novamente no WhatsApp';
+        const trackingLink=document.createElement('a');
+        trackingLink.href=`/pedido?token=${encodeURIComponent(order.trackingToken)}`;
+        trackingLink.textContent='Acompanhar pedido';
+        const newOrderButton=document.createElement('button');
+        newOrderButton.type='button';
+        newOrderButton.className='small';
+        newOrderButton.textContent='Fazer novo pedido';
+        newOrderButton.addEventListener('click',()=>{
+          registeredOrder=null;
+          cart=[];
+          updateCart();
+          result.replaceChildren();
+          const checkoutButton=document.querySelector('#checkout .primary');
+          if(checkoutButton){checkoutButton.disabled=false;checkoutButton.textContent='Finalizar e enviar pelo WhatsApp';delete checkoutButton.dataset.orderRegistered}
+          closeModal('cartModal');
+        });
+        result.append(notice,whatsappLink,trackingLink,newOrderButton);
+      }
+      sendWhatsApp=async function(){
+        if(registeredOrder){
+          showRegisteredOrder(registeredOrder,registeredOrder.waUrl);
+          window.open(registeredOrder.waUrl,'_blank','noopener,noreferrer');
+          return;
+        }
+        if(submitInProgress)return;
+        if(!cart.length){alert('Adicione pelo menos um item ao pedido.');return}
+        if(!value('#customerName')){alert('Informe seu nome para continuar.');return}
+        if(!validPhone(phoneInput?.value)){
+          alert('Informe um número de WhatsApp válido com DDD para continuar.');
+          phoneInput?.focus();
+          return;
+        }
+        const status=await window.businessStatusReady?.();
+        if(status?.isOpen!==true){
+          alert(status?.message||'Não foi possível confirmar se o delivery está aberto.');
+          return;
+        }
+        const items=cart.map(item=>({...item}));
+        const order={
+          customer:value('#customerName'),
+          customerPhone:digitsOnly(phoneInput.value),
+          method:document.querySelector('input[name="delivery"]:checked')?.value||'Entrega',
+          address:value('#address'),
+          neighborhood:value('#neighborhood'),
+          addressNumber:value('#addressNumber'),
+          complement:value('#complement'),
+          cep:value('#cep'),
+          reference:value('#reference'),
+          payment:value('#payment'),
+          items,
+          total:items.reduce((sum,item)=>sum+(Number(item.price)||0),0),
+        };
+        if(order.method==='Entrega'&&!order.address){alert('Informe o endereço para delivery.');return}
+        const popup=window.open('about:blank','_blank');
+        const button=document.querySelector('#checkout .primary');
+        submitInProgress=true;
+        if(button){button.disabled=true;button.textContent='Registrando pedido…'}
+        try{
+          const response=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)});
+          const body=await response.json().catch(()=>({}));
+          if(!response.ok){
+            popup?.close();
+            alert(body.error||'Não foi possível registrar o pedido. Tente novamente.');
+            return;
+          }
+          registeredOrder={...order,...body};
+          registeredOrder.waUrl=buildWhatsAppUrl(registeredOrder);
+          showRegisteredOrder(registeredOrder,registeredOrder.waUrl);
+          if(popup){
+            try{
+              popup.opener=null;
+              popup.location.href=registeredOrder.waUrl;
+            }catch{
+              popup.close();
+            }
+          }
+          if(button){button.textContent='Pedido registrado';button.disabled=true;button.dataset.orderRegistered='true'}
+        }catch{
+          popup?.close();
+          alert('Não foi possível registrar o pedido. Verifique sua conexão e tente novamente.');
+        }finally{
+          submitInProgress=false;
+          if(button&&!registeredOrder){button.disabled=false;button.textContent='Finalizar e enviar pelo WhatsApp'}
+        }
+      };
     })();
   </script>
 </body></html>
